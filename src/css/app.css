@@ -16,38 +16,119 @@
 }
 
 .demo-oracle-icon {
-  width:137px;
-  height:18px
+  width: 137px;
+  height: 18px;
 }
 
 .demo-oracle-icon:before {
-  content:url("images/oracle_logo.svg")
+  content: url("images/oracle_logo.svg");
 }
 
 html:not([dir="rtl"]) .demo-oracle-icon {
-  padding-right:4px
+  padding-right: 4px;
 }
 
 html[dir="rtl"] .demo-oracle-icon {
-  padding-left:4px
+  padding-left: 4px;
 }
 
 .demo-oracle-icon:before {
-  display:inline
+  display: inline;
 }
 
 .demo-appheader-avatar {
-  width:24px;
-  height:24px
+  width: 24px;
+  height: 24px;
 }
 
 .demo-appheader-avatar:before {
-  content:url("images/avatar_24px.png")
+  content: url("images/avatar_24px.png");
 }
-@media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi), (min-resolution: 1.5dppx) {
+@media (-webkit-min-device-pixel-ratio: 1.5),
+  (min-resolution: 144dpi),
+  (min-resolution: 1.5dppx) {
   .demo-appheader-avatar:before {
-      content:url("images/avatar_24px_2x.png");
-      -webkit-transform:translate(-25%, -25%) scale(0.5);
-      transform:translate(-25%, -25%) scale(0.5)
+    content: url("images/avatar_24px_2x.png");
+    -webkit-transform: translate(-25%, -25%) scale(0.5);
+    transform: translate(-25%, -25%) scale(0.5);
   }
+}
+
+/* home-page */
+
+.home-container {
+  height: 78vh;
+  width: 100%;
+  background-image: linear-gradient(
+    to right top,
+    #c6340d,
+    #d42a26,
+    #e11f3b,
+    #eb1451,
+    #f30e67
+  );
+
+  overflow: hidden;
+  color: white;
+  position: relative;
+}
+
+.bg-wave {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  object-fit: contain;
+  z-index: 0;
+}
+
+.home-container-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  padding: 0px 10px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.home-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  transform: translateY(30px);
+  transition: all 0.8s ease-in-out;
+}
+.home-left.loaded {
+  transform: translateX(0);
+}
+
+.home-left > h1 {
+  font-size: 4rem;
+}
+
+.home-left > p {
+  font-weight: 400;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+  margin: 20px 0px;
+}
+
+.home-right {
+  flex: 1;
+  z-index: 2;
+  padding: 20px;
+}
+
+.home-prop-img {
+  max-height: 450px;
+  object-fit: cover;
+  transform: scale(0.8);
+  opacity: 0.7;
+  transition: all 0.8s ease-in-out;
+}
+
+.home-prop-img.loaded {
+  opacity: 1;
+  transform: scale(1);
 }

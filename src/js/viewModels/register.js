@@ -9,12 +9,12 @@
  * Your incidents ViewModel code goes here
  */
 define(["../accUtils"], function (accUtils) {
-  function LiveViewModel() {}
+  function RegisterViewModel() {}
 
   /*
    * Returns an instance of the ViewModel providing one instance of the ViewModel. If needed,
    * return a constructor for the ViewModel so that the ViewModel is constructed
    * each time the view is displayed.
    */
-  return LiveViewModel;
+  return RegisterViewModel;
 });

@@ -150,18 +150,32 @@
                   display="[[smScreen() ? 'icons' : 'all']]"
                   chroming="borderless"
                 >
-                  <span
-                    ><oj-bind-text value="[[userLogin]]"></oj-bind-text
-                  ></span>
+                  <span>
+                    <oj-bind-if test="[[authenticated]]">
+                      <oj-bind-text value="[[userLogin]]"></oj-bind-text>
+                    </oj-bind-if>
+                    <oj-bind-if test="[[!authenticated()]]">
+                      <oj-bind-text value="Login"></oj-bind-text>
+                    </oj-bind-if>
+                  </span>
                   <span
                     slot="endIcon"
                     :class="[[{'oj-icon demo-appheader-avatar': smScreen(), 'oj-component-icon oj-button-menu-dropdown-icon': !smScreen()}]]"
                   ></span>
-                  <oj-menu id="menu1" slot="menu">
-                    <oj-option id="pref" value="pref">Preferences</oj-option>
-                    <oj-option id="help" value="help">Help</oj-option>
-                    <oj-option id="about" value="about">About</oj-option>
-                    <oj-option id="out" value="out">Sign Out</oj-option>
+                  <oj-menu
+                    id="menu1"
+                    slot="menu"
+                    on-oj-menu-action="[[menuItemAction]]"
+                  >
+                    <oj-bind-if test="[[authenticated]]">
+                      <oj-option id="prof" value="profile">Profile</oj-option>
+                      <oj-option id="serv" value="services">Services</oj-option>
+                      <oj-option id="out" value="out">Sign Out</oj-option>
+                    </oj-bind-if>
+                    <oj-bind-if test="[[!authenticated()]]">
+                      <oj-option id="log" value="login">Login</oj-option>
+                      <oj-option id="reg" value="register">Register</oj-option>
+                    </oj-bind-if>
                   </oj-menu>
                 </oj-menu-button>
               </oj-toolbar>
