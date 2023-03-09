@@ -44,12 +44,13 @@
         <div class="flex gap-2 h-full items-center">
           <div class="flex bg-white p-2 rounded-md h-full items-center">
             <span class="text-xl text-gray-600 font-semibold">
-              <oj-bind-text value="XIFIT"></oj-bind-text>
+              <oj-bind-text value="[[captchaValue]]"></oj-bind-text>
             </span>
             <span
-              class="oj-ux-ico-refresh"
+              class="oj-ux-ico-refresh cursor-pointer"
               role="img"
               aria-label="refresh"
+              on-click="[[getCaptcha]]"
             ></span>
           </div>
           <oj-input-text

@@ -1,12 +1,10 @@
-define([], function () {
+define(["../context/userContext"], function (userContext) {
   class UserService {
     constructor() {}
 
     fetchCaptcha() {
       return fetch("http://localhost:8080/api/auth", {
         method: "GET",
-        crossorigin: true,
-        mode: "no-cors",
       });
     }
 
@@ -20,6 +18,23 @@ define([], function () {
         body: JSON.stringify(userCredentials),
       };
       return fetch("http://localhost:8080/api/auth/login", config);
+    }
+
+    updateUserContext(profile, authToken) {
+      userContext.updateProfileAndToken(profile, authToken);
+    }
+
+    handleSignOut() {
+      this.updateUserContext(
+        {
+          email: "",
+          firstName: "",
+          lastName: "",
+          mobileNo: "",
+          profileImage: "",
+        },
+        ""
+      );
     }
   }
   return new UserService();

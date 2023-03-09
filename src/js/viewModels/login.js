@@ -11,18 +11,25 @@
 define([
   "knockout",
   "../services/UserService",
-  "ojs/ojcorerouter",
   "ojs/ojinputtext",
   "ojs/ojformlayout",
   "ojs/ojinputnumber",
   "ojs/ojbutton",
-], function (ko, UserService, CoreRouter) {
-  function LoginViewModel() {
+], function (ko, UserService) {
+  function LoginViewModel(context) {
     var self = this;
+    const router = context.parentRouter;
+    const authenticated = context.routerState.detail.authenticated();
+    this.loaded = ko.observable(false);
+    if (authenticated) {
+      router.go({ path: "home" }).then(function () {
+        this.navigated = true;
+      });
+    }
+    self.userLogin = context.routerState.detail.userLogin;
 
     self.email = ko.observable(null);
     self.password = ko.observable(null);
-
     self.handleLogin = async function () {
       try {
         const credentials = {
@@ -31,8 +38,20 @@ define([
         };
         const res = await UserService.loginWithCredentials(credentials);
         const jsonData = await res.json();
-        alert("Login Successfull");
-        CoreRouter.go({ path: "home" }).then(function () {
+
+        UserService.updateUserContext(
+          {
+            firstName: jsonData.firstName,
+            lastName: jsonData.lastName,
+            email: jsonData.email,
+            mobileNo: jsonData.mobileNo,
+            profileImage: jsonData.profileImage,
+            role: jsonData.role,
+          },
+          jsonData.token
+        );
+        self.userLogin(jsonData.email);
+        router.go({ path: "home" }).then(function () {
           this.navigated = true;
         });
       } catch (e) {

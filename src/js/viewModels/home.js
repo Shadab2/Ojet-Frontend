@@ -8,10 +8,21 @@
 /*
  * Your incidents ViewModel code goes here
  */
-define(["knockout", "../accUtils"], function (ko, accUtils) {
-  function HomeViewModel() {
+define(["knockout", "../accUtils", "../context/userContext"], function (
+  ko,
+  accUtils,
+  userContext
+) {
+  function HomeViewModel(context) {
     var self = this;
+    const authenticated = context.routerState.detail.authenticated();
+    const router = context.parentRouter;
     this.loaded = ko.observable(false);
+    if (!authenticated) {
+      router.go({ path: "login" }).then(function () {
+        this.navigated = true;
+      });
+    }
     this.connected = () => {
       accUtils.announce("Home page loaded.", "assertive");
       document.title = "Home";
@@ -20,6 +31,7 @@ define(["knockout", "../accUtils"], function (ko, accUtils) {
       }, 50);
       // Implement further logic if needed
     };
+    console.log(userContext);
   }
 
   /*

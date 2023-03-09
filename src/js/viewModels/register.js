@@ -10,20 +10,43 @@
  */
 define([
   "knockout",
+  "../services/UserService",
   "ojs/ojinputtext",
   "ojs/ojformlayout",
   "ojs/ojinputnumber",
   "ojs/ojbutton",
-], function (ko) {
-  function RegisterViewModel() {
+  "ojs/ojknockout",
+], function (ko, UserService) {
+  function RegisterViewModel(context) {
     var self = this;
+    const authenticated = context.routerState.detail.authenticated();
+    const router = context.parentRouter;
+    if (authenticated) {
+      router.go({ path: "home" }).then(function () {
+        this.navigated = true;
+      });
+    }
 
     self.firstName = ko.observable("");
     self.lastName = ko.observable("");
     self.email = ko.observable("");
     self.password = ko.observable("");
     self.contactNumber = ko.observable(null);
-    self.captcha = ko.observable("");
+    self.captcha = ko.observable(null);
+    self.captchaValue = ko.observable(null);
+    self.captchaId = ko.observable(null);
+
+    self.getCaptcha = async function () {
+      try {
+        const res = await UserService.fetchCaptcha();
+        const json = await res.json();
+        self.captchaValue(json.captcha);
+        self.captchaId(json.captchaId);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    self.getCaptcha();
   }
 
   /*

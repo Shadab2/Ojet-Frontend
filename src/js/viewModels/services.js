@@ -9,7 +9,15 @@
  * Your incidents ViewModel code goes here
  */
 define(["../accUtils"], function (accUtils) {
-  function ServicesViewModel() {}
+  function ServicesViewModel(context) {
+    const authenticated = context.routerState.detail.authenticated();
+    const router = context.parentRouter;
+    if (!authenticated) {
+      router.go({ path: "login" }).then(function () {
+        this.navigated = true;
+      });
+    }
+  }
 
   /*
    * Returns an instance of the ViewModel providing one instance of the ViewModel. If needed,

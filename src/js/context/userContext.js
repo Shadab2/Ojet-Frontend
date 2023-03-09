@@ -1,4 +1,4 @@
-define([], function () {
+define(["knockout"], function (ko) {
   const user = {
     profile: {
       email: "",
@@ -8,6 +8,10 @@ define([], function () {
       profileImage: "",
     },
     authToken: "",
+    updateProfileAndToken: function (profileData, authTokenFromBackend) {
+      this.profile = profileData;
+      this.authToken = authTokenFromBackend;
+    },
   };
   return user;
 });

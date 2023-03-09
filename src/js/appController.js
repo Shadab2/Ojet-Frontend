@@ -11,6 +11,7 @@
 define([
   "knockout",
   "./context/userContext",
+  "./services/UserService",
   "ojs/ojcontext",
   "ojs/ojmodule-element-utils",
   "ojs/ojknockouttemplateutils",
@@ -27,6 +28,7 @@ define([
 ], function (
   ko,
   userContext,
+  UserService,
   Context,
   moduleUtils,
   KnockoutTemplateUtils,
@@ -49,6 +51,7 @@ define([
       this.manner(event.detail.manner);
     };
 
+    var current = this;
     document
       .getElementById("globalBody")
       .addEventListener("announce", announcementHandler, false);
@@ -68,46 +71,62 @@ define([
     this.appName = ko.observable("Trainings");
     // User Info used in Global Navigation area
 
+    current.userLogin = ko.observable(userContext.profile.email);
     this.authenticated = ko.computed(function () {
-      return userContext.authToken !== "";
-    });
-    this.userLogin = ko.observable(userContext.profile.email);
-
-    let routes = ko.computed(function () {
-      if (this.authenticated)
-        return [
-          {
-            path: "profile",
-            detail: { label: "Profile", iconClass: " oj-ux-ico-profile-card" },
-          },
-          {
-            path: "services",
-            detail: { label: "Services", iconClass: "oj-ux-ico-webhook" },
-          },
-          {
-            path: "about",
-            detail: { label: "About", iconClass: "oj-ux-ico-information-s" },
-          },
-        ];
-      return [
-        {
-          path: "register",
-          detail: { label: "Register", iconClass: "oj-ux-ico-batch-edit" },
-        },
-        {
-          path: "login",
-          detail: { label: "Login", iconClass: "oj-ux-ico-user-data" },
-        },
-      ];
-    });
+      return current.userLogin() !== "";
+    }, this);
 
     let navData = [
-      { path: "", redirect: "home" },
+      { path: "", redirect: "login" },
       {
         path: "home",
-        detail: { label: "Home", iconClass: "oj-ux-ico-home" },
+        detail: {
+          label: "Home",
+          iconClass: "oj-ux-ico-home",
+          authenticated: current.authenticated,
+        },
       },
-      ...routes(),
+      {
+        path: "profile",
+        detail: {
+          label: "Profile",
+          iconClass: " oj-ux-ico-profile-card",
+          authenticated: current.authenticated,
+        },
+      },
+      {
+        path: "services",
+        detail: {
+          label: "Services",
+          iconClass: "oj-ux-ico-webhook",
+          authenticated: current.authenticated,
+        },
+      },
+      {
+        path: "about",
+        detail: {
+          label: "About",
+          iconClass: "oj-ux-ico-information-s",
+          authenticated: current.authenticated,
+        },
+      },
+      {
+        path: "register",
+        detail: {
+          label: "Register",
+          iconClass: "oj-ux-ico-batch-edit",
+          authenticated: current.authenticated,
+        },
+      },
+      {
+        path: "login",
+        detail: {
+          label: "Login",
+          iconClass: "oj-ux-ico-user-data",
+          authenticated: current.authenticated,
+          userLogin: current.userLogin,
+        },
+      },
     ];
 
     // Router setup
@@ -117,13 +136,19 @@ define([
     router.sync();
 
     this.moduleAdapter = new ModuleRouterAdapter(router);
-
     this.selection = new KnockoutRouterAdapter(router);
 
     // Setup the navDataProvider with the routes, excluding the first redirected
     // route.
-    this.navDataProvider = new ArrayDataProvider(navData.slice(1), {
-      keyAttributes: "path",
+    this.navDataProvider = ko.computed(function () {
+      if (current.authenticated()) {
+        return new ArrayDataProvider(navData.slice(1, 5), {
+          keyAttributes: "path",
+        });
+      } else
+        return new ArrayDataProvider(navData.slice(5), {
+          keyAttributes: "path",
+        });
     });
 
     // Drawer
@@ -140,6 +165,14 @@ define([
     };
 
     this.menuItemAction = (event) => {
+      if (event.detail.selectedValue === "out") {
+        current.userLogin("");
+        UserService.handleSignOut();
+        router.go({ path: "login" }).then(function () {
+          this.navigated = true;
+        });
+        return;
+      }
       router.go({ path: event.detail.selectedValue }).then(function () {
         this.navigated = true;
       });
