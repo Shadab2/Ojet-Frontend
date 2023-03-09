@@ -8,17 +8,38 @@
 /*
  * Your incidents ViewModel code goes here
  */
-define(["../services/UserService"], function (UserService) {
+define([
+  "knockout",
+  "../services/UserService",
+  "ojs/ojcorerouter",
+  "ojs/ojinputtext",
+  "ojs/ojformlayout",
+  "ojs/ojinputnumber",
+  "ojs/ojbutton",
+], function (ko, UserService, CoreRouter) {
   function LoginViewModel() {
-    //   UserService.loginWithCredentials({
-    //     email: "Shadab2.danish2@gmail.com",
-    //     password: "123456",
-    //   })
-    //     .then((res) => res.json())
-    //     .then((data) => console.log(data));
-    UserService.fetchCaptcha()
-      .then((res) => res.json())
-      .then((json) => console.log(json));
+    var self = this;
+
+    self.email = ko.observable(null);
+    self.password = ko.observable(null);
+
+    self.handleLogin = async function () {
+      try {
+        const credentials = {
+          email: self.email(),
+          password: self.password(),
+        };
+        const res = await UserService.loginWithCredentials(credentials);
+        const jsonData = await res.json();
+        alert("Login Successfull");
+        CoreRouter.go({ path: "home" }).then(function () {
+          this.navigated = true;
+        });
+      } catch (e) {
+        alert("Something went wrong");
+        console.log(e);
+      }
+    };
   }
 
   /*

@@ -11,16 +11,15 @@ define([], function () {
     }
 
     loginWithCredentials(userCredentials) {
-      return fetch("http://localhost:8080/api/auth/login", {
+      const config = {
         method: "POST",
-        crossorigin: true,
-        mode: "no-cors",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
         body: JSON.stringify(userCredentials),
-      });
+      };
+      return fetch("http://localhost:8080/api/auth/login", config);
     }
   }
   return new UserService();

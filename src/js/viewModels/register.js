@@ -8,8 +8,23 @@
 /*
  * Your incidents ViewModel code goes here
  */
-define(["../accUtils"], function (accUtils) {
-  function RegisterViewModel() {}
+define([
+  "knockout",
+  "ojs/ojinputtext",
+  "ojs/ojformlayout",
+  "ojs/ojinputnumber",
+  "ojs/ojbutton",
+], function (ko) {
+  function RegisterViewModel() {
+    var self = this;
+
+    self.firstName = ko.observable("");
+    self.lastName = ko.observable("");
+    self.email = ko.observable("");
+    self.password = ko.observable("");
+    self.contactNumber = ko.observable(null);
+    self.captcha = ko.observable("");
+  }
 
   /*
    * Returns an instance of the ViewModel providing one instance of the ViewModel. If needed,

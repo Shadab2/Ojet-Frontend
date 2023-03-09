@@ -76,6 +76,8 @@ html[dir="rtl"] .demo-oracle-icon {
 .bg-wave {
   position: absolute;
   bottom: 0;
+  left: 0;
+  right: 0;
   width: 100%;
   object-fit: contain;
   z-index: 0;

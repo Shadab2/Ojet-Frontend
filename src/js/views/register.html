@@ -3,10 +3,69 @@
  Licensed under The Universal Permissive License (UPL), Version 1.0
  as shown at https://oss.oracle.com/licenses/upl/
  -->
-<div class="oj-hybrid-padding">
-  <h1>Register Page</h1>
-  <div>
-    To change the content of this section, you will make edits to the live.html
-    file located in the /js/views folder.
+<div
+  class="oj-hybrid-padding bg-teal-600 min-h-[78vh] flex items-center relative w-full"
+>
+  <img class="bg-wave" src="../../css/images/bg-wave.png" alt="bg-wave" />
+  <div class="h-full w-[75%] mx-auto">
+    <h1 class="text-white">Register Page</h1>
+    <div class="my-5">
+      <oj-form-layout
+        id="formLayoutOptions"
+        max-columns="2"
+        direction="row"
+        user-assistance-density="compact"
+      >
+        <oj-input-text
+          id="text-input-first"
+          value="{{firstName}}"
+          label-hint="First Name"
+          label-edge="inside"
+        ></oj-input-text>
+        <oj-input-text
+          id="text-input-last"
+          value="{{lastName}}"
+          label-hint="Last Name"
+          label-edge="inside"
+        ></oj-input-text>
+        <oj-input-text
+          id="text-input-email"
+          value="{{email}}"
+          label-hint="Email"
+          label-edge="inside"
+        ></oj-input-text>
+        <oj-input-password
+          id="registration-password"
+          value="{{password}}"
+          label-hint="password"
+          mask-icon="visible"
+        ></oj-input-password>
+        <oj-input-number label-hint="Contact Number"></oj-input-number>
+        <div class="flex gap-2 h-full items-center">
+          <div class="flex bg-white p-2 rounded-md h-full items-center">
+            <span class="text-xl text-gray-600 font-semibold">
+              <oj-bind-text value="XIFIT"></oj-bind-text>
+            </span>
+            <span
+              class="oj-ux-ico-refresh"
+              role="img"
+              aria-label="refresh"
+            ></span>
+          </div>
+          <oj-input-text
+            id="text-input-captcha"
+            value="{{captcha}}"
+            label-hint="Captcha"
+            label-edge="inside"
+          ></oj-input-text>
+        </div>
+        <oj-button
+          id="chroming_button4"
+          class="oj-button-full-width"
+          chroming="callToAction"
+          >Register</oj-button
+        >
+      </oj-form-layout>
+    </div>
   </div>
 </div>
