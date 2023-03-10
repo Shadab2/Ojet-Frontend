@@ -5,8 +5,104 @@
  -->
 <div class="oj-hybrid-padding">
   <h1>Profile Page</h1>
-  <div>
-    To change the content of this section, you will make edits to the
-    incidents.html file located in the /js/views folder.
+  <div class="flex py-5">
+    <div class="flex flex-col flex-1 gap-1">
+      <div class="flex w-full gap-3">
+        <div class="w-[300px] h-[250px] rounded-md my-3 shadow-md">
+          <img
+            :src="[[profileImage]]"
+            alt="profileImage"
+            class="w-full h-full object-cover rounded-md"
+          />
+        </div>
+        <div class="py-2 px-5 flex flex-col gap-3 w-full">
+          <h4>About</h4>
+          <div class="flex items-center gap-2">
+            <span class="oj-ux-ico-email" role="img" aria-label="email"></span>
+            <span class="font-semibold">
+              <oj-bind-text value="[[email]]"></oj-bind-text>
+            </span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span
+              class="oj-ux-ico-user-available"
+              role="img"
+              aria-label="name"
+            ></span>
+            <span class="font-semibold">
+              <oj-bind-text
+                value="[[firstName()+' '+lastName()]]"
+              ></oj-bind-text>
+            </span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span
+              class="oj-ux-ico-phone"
+              role="img"
+              aria-label="contact"
+            ></span>
+            <span class="font-semibold">
+              <oj-bind-text value="[[mobileNo]]"></oj-bind-text>
+            </span>
+          </div>
+          <div class="flex items-center gap-2 my-2 shadow-md p-2 w-4/5">
+            <input type="file" on-change="[[handleFileChange]]" />
+            <oj-button
+              class="ml-auto"
+              disabled="[[!fileToUpload]]"
+              on-oj-action="[[handleProfileImageUpdate]]"
+            >
+              <span
+                class="oj-ux-ico-upload"
+                role="img"
+                aria-label="name"
+              ></span>
+            </oj-button>
+          </div>
+        </div>
+      </div>
+      <hr />
+      <span class="text-xl text-left font-semibold text-teal-700">
+        <oj-bind-text value="[[firstName()+' '+lastName()]]"></oj-bind-text>
+      </span>
+      <span class="text-left italic font-thin text-teal-700">
+        <oj-bind-text value="[[email]]"></oj-bind-text>
+      </span>
+    </div>
+    <div class="flex flex-col flex-1 gap-3">
+      <h4 class="font-bold text-xl mt-4">Edit</h4>
+      <oj-form-layout
+        id="formLayoutOptions"
+        max-columns="1"
+        direction="row"
+        user-assistance-density="compact"
+      >
+        <oj-input-text
+          id="text-input-first"
+          value="{{editableFirstName}}"
+          label-hint="First Name"
+          label-edge="inside"
+        ></oj-input-text>
+        <oj-input-text
+          id="text-input-last"
+          value="{{editableLastName}}"
+          label-hint="Last Name"
+          label-edge="inside"
+        ></oj-input-text>
+        <oj-input-text
+          id="text-input-last"
+          value="{{editableMobileNo}}"
+          label-hint="Contact No"
+          label-edge="inside"
+        ></oj-input-text>
+        <oj-button
+          id="chroming_button4"
+          class="oj-button-full-width"
+          chroming="callToAction"
+          on-oj-action="[[handleProfileUpdate]]"
+          >Update</oj-button
+        >
+      </oj-form-layout>
+    </div>
   </div>
 </div>

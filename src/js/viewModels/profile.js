@@ -8,8 +8,18 @@
 /*
  * Your incidents ViewModel code goes here
  */
-define(["../accUtils"], function (accUtils) {
+define([
+  "knockout",
+  "../context/userContext",
+  "../services/userService",
+  "ojs/ojinputtext",
+  "ojs/ojformlayout",
+  "ojs/ojinputnumber",
+  "ojs/ojbutton",
+  "ojs/ojknockout",
+], function (ko, UserContext, UserService) {
   function ProfileViewModel(context) {
+    var self = this;
     const authenticated = context.routerState.detail.authenticated();
     const router = context.parentRouter;
     if (!authenticated) {
@@ -17,6 +27,63 @@ define(["../accUtils"], function (accUtils) {
         this.navigated = true;
       });
     }
+    const profile = UserContext.profile;
+    self.firstName = ko.observable(profile.firstName);
+    self.lastName = ko.observable(profile.lastName);
+    self.email = ko.observable(profile.email);
+    self.mobileNo = ko.observable(profile.mobileNo);
+    self.profileImage = ko.observable(
+      profile.profileImage
+        ? "data:image/jpeg;base64," + profile.profileImage
+        : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQA7J_nWmuLQLoOtHyvwRXfkrkVvW621Bx9nQ&usqp=CAU"
+    );
+    self.fileToUpload = ko.observable(null);
+
+    self.editableFirstName = ko.observable(profile.firstName);
+    self.editableLastName = ko.observable(profile.lastName);
+    self.editableMobileNo = ko.observable(profile.mobileNo);
+
+    self.handleProfileImageUpdate = async function () {
+      if (!self.fileToUpload()) return;
+      try {
+        const res = await UserService.updateProfilePhoto(self.fileToUpload());
+        const data = await res.data;
+        self.profileImage("data:image/jpeg;base64," + data.image);
+        alert("Profile page updated");
+      } catch (e) {
+        alert("Something went wrong");
+      }
+    };
+
+    self.handleFileChange = function (e) {
+      self.fileToUpload(e.target.files[0]);
+    };
+
+    self.handleProfileUpdate = async function () {
+      if (
+        self.editableFirstName() === "" ||
+        self.editableLastName === "" ||
+        self.editableMobileNo === ""
+      ) {
+        alert("No empty fields allowed");
+        return;
+      }
+      const profile = {
+        firstName: self.editableFirstName(),
+        lastName: self.editableLastName(),
+        mobileNo: self.editableMobileNo(),
+        email: self.email(),
+      };
+      try {
+        const res = await UserService.updateProfile(profile);
+        self.firstName(self.editableFirstName());
+        self.lastName(self.editableLastName());
+        self.mobileNo(self.editableMobileNo());
+        alert("Profile Updated Successfully!");
+      } catch (e) {
+        alert("Something went wrong");
+      }
+    };
   }
 
   /*
@@ -26,3 +93,4 @@ define(["../accUtils"], function (accUtils) {
    */
   return ProfileViewModel;
 });
+1;

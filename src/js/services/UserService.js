@@ -1,27 +1,19 @@
-define(["../context/userContext"], function (userContext) {
+define(["../context/userContext", "axios"], function (UserContext, axios) {
   class UserService {
-    constructor() {}
+    constructor() {
+      this.baseUrl = "http://localhost:8080/api";
+    }
 
     fetchCaptcha() {
-      return fetch("http://localhost:8080/api/auth", {
-        method: "GET",
-      });
+      return axios.get(this.baseUrl + "/auth");
     }
 
     loginWithCredentials(userCredentials) {
-      const config = {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userCredentials),
-      };
-      return fetch("http://localhost:8080/api/auth/login", config);
+      return axios.post(this.baseUrl + "/auth/login", userCredentials);
     }
 
     updateUserContext(profile, authToken) {
-      userContext.updateProfileAndToken(profile, authToken);
+      UserContext.updateProfileAndToken(profile, authToken);
     }
 
     handleSignOut() {
@@ -35,6 +27,34 @@ define(["../context/userContext"], function (userContext) {
         },
         ""
       );
+    }
+
+    updateProfile(profile) {
+      const authToken = UserContext.authToken;
+      return axios.put(this.baseUrl + "/user", profile, {
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+    }
+    updateProfilePhoto(fileToUpload) {
+      const authToken = UserContext.authToken;
+      const formData = new FormData();
+      formData.append("file", fileToUpload);
+      return axios({
+        method: "post",
+        url: this.baseUrl + "/user/upload-profile",
+        data: formData,
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
+    }
+
+    fetchAllCountries() {
+      const authToken = UserContext.authToken;
+      return axios.get(this.baseUrl + "/service/country", {
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
     }
   }
   return new UserService();

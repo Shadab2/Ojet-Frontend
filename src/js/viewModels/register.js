@@ -39,9 +39,9 @@ define([
     self.getCaptcha = async function () {
       try {
         const res = await UserService.fetchCaptcha();
-        const json = await res.json();
-        self.captchaValue(json.captcha);
-        self.captchaId(json.captchaId);
+        const data = res.data;
+        self.captchaValue(data.captcha);
+        self.captchaId(data.captchaId);
       } catch (e) {
         console.log(e);
       }

@@ -37,7 +37,7 @@ define([
           password: self.password(),
         };
         const res = await UserService.loginWithCredentials(credentials);
-        const jsonData = await res.json();
+        const jsonData = res.data;
 
         UserService.updateUserContext(
           {
