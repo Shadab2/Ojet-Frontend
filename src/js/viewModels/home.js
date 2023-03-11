@@ -31,7 +31,6 @@ define(["knockout", "../accUtils", "../context/userContext"], function (
       }, 50);
       // Implement further logic if needed
     };
-    console.log(userContext);
   }
 
   /*

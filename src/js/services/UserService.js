@@ -56,6 +56,33 @@ define(["../context/userContext", "axios"], function (UserContext, axios) {
         headers: { Authorization: `Bearer ${authToken}` },
       });
     }
+
+    fetchCountryByIso(countryIsoCode) {
+      const authToken = UserContext.authToken;
+      return axios.get(this.baseUrl + `/service/country/${countryIsoCode}`, {
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+    }
+
+    fetchRestUserData() {
+      const authToken = UserContext.authToken;
+      return axios.get(this.baseUrl + "/service/users", {
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+    }
+
+    downloadExcelUserData(userId) {
+      const authToken = UserContext.authToken;
+      return axios.get(
+        this.baseUrl + "/service/users/" + userId + "/download",
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            "Content-Type": "blob",
+          },
+        }
+      );
+    }
   }
   return new UserService();
 });

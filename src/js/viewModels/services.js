@@ -8,15 +8,73 @@
 /*
  * Your incidents ViewModel code goes here
  */
-define(["../accUtils"], function (accUtils) {
+define(["knockout", "../services/userService", "ojs/ojknockout"], function (
+  ko,
+  UserService
+) {
   function ServicesViewModel(context) {
     const authenticated = context.routerState.detail.authenticated();
     const router = context.parentRouter;
+    var self = this;
     if (!authenticated) {
       router.go({ path: "login" }).then(function () {
         this.navigated = true;
       });
     }
+
+    self.countriesData = ko.observableArray([]);
+    self.restUserData = ko.observableArray([]);
+    self.countryIsoCode = ko.observable("");
+    self.countryInfo = ko.observable(null);
+
+    self.getAllCountries = async () => {
+      try {
+        const res = await UserService.fetchAllCountries();
+        self.countriesData(res.data.tcountryCodeAndName);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    self.getCountryByIso = async () => {
+      if (self.countryIsoCode() === "") return;
+      try {
+        const res = await UserService.fetchCountryByIso(self.countryIsoCode());
+        self.countryInfo(res.data);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    self.getRestUser = async () => {
+      try {
+        const res = await UserService.fetchRestUserData();
+        self.restUserData(res.data);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    self.downloadExcelUser = async (event, current, bindingContext) => {
+      try {
+        const res = await UserService.downloadExcelUserData(current.data.id);
+        const outputFilename = "userInfo.xlsx";
+        var mediaType =
+          "data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,";
+        const link = document.createElement("a");
+        link.href = mediaType + res.data;
+        link.setAttribute("download", outputFilename);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        console.log("downloaded");
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    self.getAllCountries();
+    self.getRestUser();
   }
 
   /*
