@@ -7,7 +7,7 @@
   class="oj-hybrid-padding bg-teal-600 min-h-[78vh] flex items-center relative w-full"
 >
   <img class="bg-wave" src="../../css/images/bg-wave.png" alt="bg-wave" />
-  <div class="h-full w-[75%] mx-auto">
+  <div class="h-full w-[75%] mx-auto static z-10">
     <h1 class="text-white">Register Page</h1>
     <div class="my-5">
       <oj-form-layout
@@ -47,7 +47,9 @@
           label-edge="inside"
         ></oj-input-text>
         <div class="flex gap-2 h-full items-center">
-          <div class="flex bg-white p-2 rounded-md h-full items-center">
+          <div
+            class="flex bg-white p-2 rounded-md h-full items-center relative"
+          >
             <span class="text-xl text-gray-600 font-semibold">
               <oj-bind-text value="[[captchaValue]]"></oj-bind-text>
             </span>
@@ -57,6 +59,12 @@
               aria-label="refresh"
               on-click="[[getCaptcha]]"
             ></span>
+
+            <span
+              class="absolute text-red-500 font-semibold text-[8px] bottom-[3px] left-[15px]"
+            >
+              <oj-bind-text value="[[invalidCaptcha]]"></oj-bind-text>
+            </span>
           </div>
           <oj-input-text
             id="text-input-captcha"
@@ -69,6 +77,7 @@
           id="chroming_button4"
           class="oj-button-full-width"
           chroming="callToAction"
+          on-oj-action="[[handleRegister]]"
           >Register</oj-button
         >
       </oj-form-layout>

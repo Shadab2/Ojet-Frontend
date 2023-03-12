@@ -67,7 +67,6 @@ define(["knockout", "../services/userService", "ojs/ojknockout"], function (
         document.body.appendChild(link);
         link.click();
         link.remove();
-        console.log("downloaded");
       } catch (e) {
         console.log(e);
       }

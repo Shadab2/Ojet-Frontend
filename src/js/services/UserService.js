@@ -16,6 +16,13 @@ define(["../context/userContext", "axios"], function (UserContext, axios) {
       UserContext.updateProfileAndToken(profile, authToken);
     }
 
+    registerUser(userProfile, captchaId) {
+      return axios.post(this.baseUrl + "/auth", {
+        ...userProfile,
+        captchaId,
+      });
+    }
+
     handleSignOut() {
       this.updateUserContext(
         {
@@ -24,6 +31,7 @@ define(["../context/userContext", "axios"], function (UserContext, axios) {
           lastName: "",
           mobileNo: "",
           profileImage: "",
+          role: null,
         },
         ""
       );

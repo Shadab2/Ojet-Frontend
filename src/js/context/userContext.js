@@ -12,6 +12,9 @@ define(["knockout"], function (ko) {
       this.profile = profileData;
       this.authToken = authTokenFromBackend;
     },
+    updateProfile: function (profileData) {
+      this.profile = profileData;
+    },
   };
   return user;
 });

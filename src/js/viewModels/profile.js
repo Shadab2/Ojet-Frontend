@@ -50,6 +50,15 @@ define([
         const data = await res.data;
         self.profileImage("data:image/jpeg;base64," + data.image);
         alert("Profile page updated");
+        const updatedProfile = {
+          firstName: profile.firstName,
+          lastName: profile.lastName,
+          mobileNo: profile.mobileNo,
+          email: profile.email,
+          role: profile.role,
+          profileImage: data.image,
+        };
+        UserContext.updateProfile(updatedProfile);
       } catch (e) {
         alert("Something went wrong");
       }
@@ -68,18 +77,27 @@ define([
         alert("No empty fields allowed");
         return;
       }
-      const profile = {
+      const editableProfile = {
         firstName: self.editableFirstName(),
         lastName: self.editableLastName(),
         mobileNo: self.editableMobileNo(),
         email: self.email(),
       };
       try {
-        const res = await UserService.updateProfile(profile);
+        const res = await UserService.updateProfile(editableProfile);
         self.firstName(self.editableFirstName());
         self.lastName(self.editableLastName());
         self.mobileNo(self.editableMobileNo());
         alert("Profile Updated Successfully!");
+        const updatedProfile = {
+          firstName: self.firstName(),
+          lastName: self.lastName(),
+          mobileNo: self.mobileNo(),
+          email: self.email(),
+          role: profile.role,
+          profileImage: profile.profileImage,
+        };
+        UserContext.updateProfile(updatedProfile);
       } catch (e) {
         alert("Something went wrong");
       }

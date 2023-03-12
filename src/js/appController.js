@@ -27,7 +27,7 @@ define([
   "ojs/ojknockout",
 ], function (
   ko,
-  userContext,
+  UserContext,
   UserService,
   Context,
   moduleUtils,
@@ -71,7 +71,7 @@ define([
     this.appName = ko.observable("Trainings");
     // User Info used in Global Navigation area
 
-    current.userLogin = ko.observable(userContext.profile.email);
+    current.userLogin = ko.observable(UserContext.profile.email);
     this.authenticated = ko.computed(function () {
       return current.userLogin() !== "";
     }, this);
@@ -103,10 +103,10 @@ define([
         },
       },
       {
-        path: "about",
+        path: "userlist",
         detail: {
-          label: "About",
-          iconClass: "oj-ux-ico-information-s",
+          label: "UserList",
+          iconClass: "oj-ux-ico-external-group-avatar",
           authenticated: current.authenticated,
         },
       },
@@ -142,9 +142,14 @@ define([
     // route.
     this.navDataProvider = ko.computed(function () {
       if (current.authenticated()) {
-        return new ArrayDataProvider(navData.slice(1, 5), {
-          keyAttributes: "path",
-        });
+        return new ArrayDataProvider(
+          UserContext.profile.role == 0
+            ? navData.slice(1, 5)
+            : navData.slice(1, 4),
+          {
+            keyAttributes: "path",
+          }
+        );
       } else
         return new ArrayDataProvider(navData.slice(5), {
           keyAttributes: "path",

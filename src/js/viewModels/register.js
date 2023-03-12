@@ -31,10 +31,11 @@ define([
     self.lastName = ko.observable("");
     self.email = ko.observable("");
     self.password = ko.observable("");
-    self.contactNumber = ko.observable(null);
-    self.captcha = ko.observable(null);
+    self.contactNumber = ko.observable("");
+    self.captcha = ko.observable("");
     self.captchaValue = ko.observable(null);
     self.captchaId = ko.observable(null);
+    self.invalidCaptcha = ko.observable(null);
 
     self.getCaptcha = async function () {
       try {
@@ -42,11 +43,34 @@ define([
         const data = res.data;
         self.captchaValue(data.captcha);
         self.captchaId(data.captchaId);
+        self.invalidCaptcha(null);
       } catch (e) {
         console.log(e);
       }
     };
     self.getCaptcha();
+
+    self.handleRegister = async () => {
+      const profile = {
+        firstName: self.firstName(),
+        lastName: self.lastName(),
+        email: self.email(),
+        password: self.password(),
+        mobileNo: self.contactNumber(),
+        captcha: self.captcha(),
+      };
+      try {
+        await UserService.registerUser(profile, self.captchaId());
+        alert("User saved successfully!");
+        router.go({ path: "login" }).then(function () {
+          this.navigated = true;
+        });
+      } catch (e) {
+        if (e.response?.data?.message.toLowerCase() === "invalid captcha!") {
+          self.invalidCaptcha("Invalid Captcha");
+        } else alert("Something went wrong");
+      }
+    };
   }
 
   /*
