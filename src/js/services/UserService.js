@@ -58,6 +58,13 @@ define(["../context/userContext", "axios"], function (UserContext, axios) {
       });
     }
 
+    fetchUserList() {
+      const authToken = UserContext.authToken;
+      return axios.get(this.baseUrl + "/user/all", {
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+    }
+
     fetchAllCountries() {
       const authToken = UserContext.authToken;
       return axios.get(this.baseUrl + "/service/country", {
