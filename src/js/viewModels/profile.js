@@ -12,12 +12,14 @@ define([
   "knockout",
   "../context/userContext",
   "../services/userService",
+  "../services/ToastService",
   "ojs/ojinputtext",
   "ojs/ojformlayout",
   "ojs/ojinputnumber",
   "ojs/ojbutton",
+  "ojs/ojmessages",
   "ojs/ojknockout",
-], function (ko, UserContext, UserService) {
+], function (ko, UserContext, UserService, ToastService) {
   function ProfileViewModel(context) {
     var self = this;
     const authenticated = context.routerState.detail.authenticated();
@@ -43,13 +45,14 @@ define([
     self.editableLastName = ko.observable(profile.lastName);
     self.editableMobileNo = ko.observable(profile.mobileNo);
 
+    self.messages = ko.observableArray(null);
+
     self.handleProfileImageUpdate = async function () {
       if (!self.fileToUpload()) return;
       try {
         const res = await UserService.updateProfilePhoto(self.fileToUpload());
         const data = await res.data;
         self.profileImage("data:image/jpeg;base64," + data.image);
-        alert("Profile page updated");
         const updatedProfile = {
           firstName: profile.firstName,
           lastName: profile.lastName,
@@ -59,8 +62,11 @@ define([
           profileImage: data.image,
         };
         UserContext.updateProfile(updatedProfile);
+        self.messages([
+          ToastService.success("Profile Image Updated Successfully!"),
+        ]);
       } catch (e) {
-        alert("Something went wrong");
+        self.messages([Toast.error("Something went wrong!")]);
       }
     };
 
@@ -74,7 +80,7 @@ define([
         self.editableLastName === "" ||
         self.editableMobileNo === ""
       ) {
-        alert("No empty fields allowed");
+        self.messages([ToastService.error("Empty Feilds are not allowed!")]);
         return;
       }
       const editableProfile = {
@@ -88,7 +94,6 @@ define([
         self.firstName(self.editableFirstName());
         self.lastName(self.editableLastName());
         self.mobileNo(self.editableMobileNo());
-        alert("Profile Updated Successfully!");
         const updatedProfile = {
           firstName: self.firstName(),
           lastName: self.lastName(),
@@ -98,8 +103,9 @@ define([
           profileImage: profile.profileImage,
         };
         UserContext.updateProfile(updatedProfile);
+        self.messages([ToastService.success("Profile Updated Successfully!")]);
       } catch (e) {
-        alert("Something went wrong");
+        self.messages([Toast.error("Something went wrong!")]);
       }
     };
   }

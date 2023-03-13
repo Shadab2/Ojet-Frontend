@@ -11,12 +11,14 @@
 define([
   "knockout",
   "../services/UserService",
+  "../services/ToastService",
   "ojs/ojinputtext",
   "ojs/ojformlayout",
   "ojs/ojinputnumber",
   "ojs/ojbutton",
+  "ojs/ojmessages",
   "ojs/ojknockout",
-], function (ko, UserService) {
+], function (ko, UserService, ToastService) {
   function RegisterViewModel(context) {
     var self = this;
     const authenticated = context.routerState.detail.authenticated();
@@ -36,6 +38,8 @@ define([
     self.captchaValue = ko.observable(null);
     self.captchaId = ko.observable(null);
     self.invalidCaptcha = ko.observable(null);
+
+    self.messages = ko.observableArray(null);
 
     self.getCaptcha = async function () {
       try {
@@ -61,10 +65,12 @@ define([
       };
       try {
         await UserService.registerUser(profile, self.captchaId());
-        alert("User saved successfully!");
-        router.go({ path: "login" }).then(function () {
-          this.navigated = true;
-        });
+        self.messages([ToastService.success("User Saved successfully")]);
+        setTimeout(() => {
+          router.go({ path: "login" }).then(function () {
+            this.navigated = true;
+          });
+        }, 2000);
       } catch (e) {
         if (e.response?.data?.message.toLowerCase() === "invalid captcha!") {
           self.invalidCaptcha("Invalid Captcha");
