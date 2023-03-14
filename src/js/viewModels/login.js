@@ -11,11 +11,13 @@
 define([
   "knockout",
   "../services/UserService",
+  "../services/ToastService",
   "ojs/ojinputtext",
   "ojs/ojformlayout",
   "ojs/ojinputnumber",
   "ojs/ojbutton",
-], function (ko, UserService) {
+  "ojs/ojmessages",
+], function (ko, UserService, ToastService) {
   function LoginViewModel(context) {
     var self = this;
     const router = context.parentRouter;
@@ -30,6 +32,8 @@ define([
 
     self.email = ko.observable(null);
     self.password = ko.observable(null);
+    self.messages = ko.observableArray(null);
+
     self.handleLogin = async function () {
       try {
         const credentials = {
@@ -55,7 +59,7 @@ define([
           this.navigated = true;
         });
       } catch (e) {
-        alert("Something went wrong");
+        self.messages([ToastService.error("Invalid Username and password!")]);
         console.log(e);
       }
     };

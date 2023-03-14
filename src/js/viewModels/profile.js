@@ -48,7 +48,10 @@ define([
     self.messages = ko.observableArray(null);
 
     self.handleProfileImageUpdate = async function () {
-      if (!self.fileToUpload()) return;
+      if (!self.fileToUpload()) {
+        self.messages([ToastService.error("Please select a file first")]);
+        return;
+      }
       try {
         const res = await UserService.updateProfilePhoto(self.fileToUpload());
         const data = await res.data;
@@ -66,7 +69,7 @@ define([
           ToastService.success("Profile Image Updated Successfully!"),
         ]);
       } catch (e) {
-        self.messages([Toast.error("Something went wrong!")]);
+        self.messages([ToastService.error("Something went wrong!")]);
       }
     };
 
