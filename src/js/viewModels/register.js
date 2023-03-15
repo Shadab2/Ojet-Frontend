@@ -54,6 +54,12 @@ define([
     };
     self.getCaptcha();
 
+    self.validate = function (profile) {
+      for (let keys of Object.keys(profile)) {
+        if (!profile[keys]) return false;
+      }
+      return true;
+    };
     self.handleRegister = async () => {
       const profile = {
         firstName: self.firstName(),
@@ -63,6 +69,10 @@ define([
         mobileNo: self.contactNumber(),
         captcha: self.captcha(),
       };
+      if (!self.validate(profile)) {
+        self.messages([ToastService.error("Empty feilds are not allowed")]);
+        return;
+      }
       try {
         await UserService.registerUser(profile, self.captchaId());
         self.messages([ToastService.success("User Saved successfully")]);

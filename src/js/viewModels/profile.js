@@ -29,21 +29,12 @@ define([
         this.navigated = true;
       });
     }
-    const profile = UserContext.profile;
-    self.firstName = ko.observable(profile.firstName);
-    self.lastName = ko.observable(profile.lastName);
-    self.email = ko.observable(profile.email);
-    self.mobileNo = ko.observable(profile.mobileNo);
-    self.profileImage = ko.observable(
-      profile.profileImage
-        ? "data:image/jpeg;base64," + profile.profileImage
-        : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQA7J_nWmuLQLoOtHyvwRXfkrkVvW621Bx9nQ&usqp=CAU"
-    );
+    self.profile = UserContext.user;
     self.fileToUpload = ko.observable(null);
 
-    self.editableFirstName = ko.observable(profile.firstName);
-    self.editableLastName = ko.observable(profile.lastName);
-    self.editableMobileNo = ko.observable(profile.mobileNo);
+    self.editableFirstName = ko.observable(self.profile().firstName);
+    self.editableLastName = ko.observable(self.profile().lastName);
+    self.editableMobileNo = ko.observable(self.profile().mobileNo);
 
     self.messages = ko.observableArray(null);
 
@@ -55,16 +46,10 @@ define([
       try {
         const res = await UserService.updateProfilePhoto(self.fileToUpload());
         const data = await res.data;
-        self.profileImage("data:image/jpeg;base64," + data.image);
         const updatedProfile = {
-          firstName: profile.firstName,
-          lastName: profile.lastName,
-          mobileNo: profile.mobileNo,
-          email: profile.email,
-          role: profile.role,
           profileImage: data.image,
         };
-        UserContext.updateProfile(updatedProfile);
+        UserService.updateUserContext(updatedProfile);
         self.messages([
           ToastService.success("Profile Image Updated Successfully!"),
         ]);
@@ -90,25 +75,13 @@ define([
         firstName: self.editableFirstName(),
         lastName: self.editableLastName(),
         mobileNo: self.editableMobileNo(),
-        email: self.email(),
       };
       try {
         const res = await UserService.updateProfile(editableProfile);
-        self.firstName(self.editableFirstName());
-        self.lastName(self.editableLastName());
-        self.mobileNo(self.editableMobileNo());
-        const updatedProfile = {
-          firstName: self.firstName(),
-          lastName: self.lastName(),
-          mobileNo: self.mobileNo(),
-          email: self.email(),
-          role: profile.role,
-          profileImage: profile.profileImage,
-        };
-        UserContext.updateProfile(updatedProfile);
+        UserService.updateUserContext(editableProfile);
         self.messages([ToastService.success("Profile Updated Successfully!")]);
       } catch (e) {
-        self.messages([Toast.error("Something went wrong!")]);
+        self.messages([ToastService.error("Something went wrong!")]);
       }
     };
   }

@@ -28,7 +28,6 @@ define([
         this.navigated = true;
       });
     }
-    self.userLogin = context.routerState.detail.userLogin;
 
     self.email = ko.observable(null);
     self.password = ko.observable(null);
@@ -52,15 +51,14 @@ define([
             profileImage: jsonData.profileImage,
             role: jsonData.role,
           },
-          jsonData.token
+          jsonData.token,
+          true
         );
-        self.userLogin(jsonData.email);
         router.go({ path: "home" }).then(function () {
           this.navigated = true;
         });
       } catch (e) {
         self.messages([ToastService.error("Invalid Username and password!")]);
-        console.log(e);
       }
     };
   }

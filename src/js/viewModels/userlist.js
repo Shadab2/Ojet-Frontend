@@ -23,13 +23,9 @@ define([
         this.navigated = true;
       });
     }
-    const profile = UserContext.profile;
+    const profile = UserContext.user();
     self.refreshing = ko.observable(true);
-    self.profileImage = ko.observable(
-      profile.profileImage
-        ? "data:image/jpeg;base64," + profile.profileImage
-        : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQA7J_nWmuLQLoOtHyvwRXfkrkVvW621Bx9nQ&usqp=CAU"
-    );
+    self.profileImage = profile.profileImage;
     self.userListData = ko.observableArray([]);
 
     self.getUserList = async function () {
@@ -43,11 +39,10 @@ define([
         self.refreshing(false);
       } catch (e) {
         self.refreshing(false);
-        console.log(e);
       }
     };
     self.getUserList();
-    setInterval(() => getUserList(), 30 * 1000);
+    setInterval(() => self.getUserList(), 30 * 1000);
   }
 
   /*
