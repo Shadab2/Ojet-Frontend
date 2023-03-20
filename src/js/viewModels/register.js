@@ -11,12 +11,14 @@
 define([
   "knockout",
   "../services/UserService",
+  "../services/ToastService",
   "ojs/ojinputtext",
   "ojs/ojformlayout",
   "ojs/ojinputnumber",
   "ojs/ojbutton",
+  "ojs/ojmessages",
   "ojs/ojknockout",
-], function (ko, UserService) {
+], function (ko, UserService, ToastService) {
   function RegisterViewModel(context) {
     var self = this;
     const authenticated = context.routerState.detail.authenticated();
@@ -37,6 +39,8 @@ define([
     self.captchaId = ko.observable(null);
     self.invalidCaptcha = ko.observable(null);
 
+    self.messages = ko.observableArray(null);
+
     self.getCaptcha = async function () {
       try {
         const res = await UserService.fetchCaptcha();
@@ -50,6 +54,12 @@ define([
     };
     self.getCaptcha();
 
+    self.validate = function (profile) {
+      for (let keys of Object.keys(profile)) {
+        if (!profile[keys]) return false;
+      }
+      return true;
+    };
     self.handleRegister = async () => {
       const profile = {
         firstName: self.firstName(),
@@ -59,12 +69,18 @@ define([
         mobileNo: self.contactNumber(),
         captcha: self.captcha(),
       };
+      if (!self.validate(profile)) {
+        self.messages([ToastService.error("Empty feilds are not allowed")]);
+        return;
+      }
       try {
         await UserService.registerUser(profile, self.captchaId());
-        alert("User saved successfully!");
-        router.go({ path: "login" }).then(function () {
-          this.navigated = true;
-        });
+        self.messages([ToastService.success("User Saved successfully")]);
+        setTimeout(() => {
+          router.go({ path: "login" }).then(function () {
+            this.navigated = true;
+          });
+        }, 2000);
       } catch (e) {
         if (e.response?.data?.message.toLowerCase() === "invalid captcha!") {
           self.invalidCaptcha("Invalid Captcha");

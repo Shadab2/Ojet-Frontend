@@ -5,12 +5,22 @@
  -->
 <div class="oj-hybrid-padding">
   <h1>Profile Page</h1>
+  <div id="notificationMessages">
+    <!-- Messages -->
+    <oj-messages
+      class="oj-color-invert"
+      messages="[[messages]]"
+      position="{}"
+      display="notification"
+      display-options.category="none"
+    ></oj-messages>
+  </div>
   <div class="flex py-5">
     <div class="flex flex-col flex-1 gap-1">
       <div class="flex w-full gap-3">
         <div class="w-[300px] h-[250px] rounded-md my-3 shadow-md">
           <img
-            :src="[[profileImage]]"
+            :src="[[profile().profileImage]]"
             alt="profileImage"
             class="w-full h-full object-cover rounded-md"
           />
@@ -20,7 +30,7 @@
           <div class="flex items-center gap-2">
             <span class="oj-ux-ico-email" role="img" aria-label="email"></span>
             <span class="font-semibold">
-              <oj-bind-text value="[[email]]"></oj-bind-text>
+              <oj-bind-text value="[[profile().email]]"></oj-bind-text>
             </span>
           </div>
           <div class="flex items-center gap-2">
@@ -31,7 +41,7 @@
             ></span>
             <span class="font-semibold">
               <oj-bind-text
-                value="[[firstName()+' '+lastName()]]"
+                value="[[profile().firstName+' '+profile().lastName]]"
               ></oj-bind-text>
             </span>
           </div>
@@ -42,7 +52,7 @@
               aria-label="contact"
             ></span>
             <span class="font-semibold">
-              <oj-bind-text value="[[mobileNo]]"></oj-bind-text>
+              <oj-bind-text value="[[profile().mobileNo]]"></oj-bind-text>
             </span>
           </div>
           <div class="flex items-center gap-2 my-2 shadow-md p-2 w-4/5">
@@ -63,10 +73,12 @@
       </div>
       <hr />
       <span class="text-xl text-left font-semibold text-teal-700">
-        <oj-bind-text value="[[firstName()+' '+lastName()]]"></oj-bind-text>
+        <oj-bind-text
+          value="[[profile().firstName+' '+profile().lastName]]"
+        ></oj-bind-text>
       </span>
       <span class="text-left italic font-thin text-teal-700">
-        <oj-bind-text value="[[email]]"></oj-bind-text>
+        <oj-bind-text value="[[profile().email]]"></oj-bind-text>
       </span>
     </div>
     <div class="flex flex-col flex-1 gap-3">

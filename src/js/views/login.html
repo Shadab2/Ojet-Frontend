@@ -6,6 +6,16 @@
 <div
   class="oj-hybrid-padding bg-teal-600 min-h-[78vh] flex items-center relative w-full"
 >
+  <div id="notificationMessages">
+    <!-- Messages -->
+    <oj-messages
+      class="oj-color-invert"
+      messages="[[messages]]"
+      position="{}"
+      display="notification"
+      display-options.category="none"
+    ></oj-messages>
+  </div>
   <img class="bg-wave" src="../../css/images/bg-wave.png" alt="bg-wave" />
   <div class="h-full w-[75%] mx-auto">
     <h1 class="text-white">Login Page</h1>

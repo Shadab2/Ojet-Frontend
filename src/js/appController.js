@@ -71,10 +71,13 @@ define([
     this.appName = ko.observable("Trainings");
     // User Info used in Global Navigation area
 
-    current.userLogin = ko.observable(UserContext.profile.email);
-    this.authenticated = ko.computed(function () {
-      return current.userLogin() !== "";
-    }, this);
+    current.user = UserContext.user;
+    current.admin = UserContext.admin;
+    current.authenticated = UserContext.authenticated;
+
+    current.userLogin = ko.computed(function () {
+      return current.user().email;
+    });
 
     let navData = [
       { path: "", redirect: "login" },
@@ -124,7 +127,6 @@ define([
           label: "Login",
           iconClass: "oj-ux-ico-user-data",
           authenticated: current.authenticated,
-          userLogin: current.userLogin,
         },
       },
     ];
@@ -143,9 +145,7 @@ define([
     this.navDataProvider = ko.computed(function () {
       if (current.authenticated()) {
         return new ArrayDataProvider(
-          UserContext.profile.role == 0
-            ? navData.slice(1, 5)
-            : navData.slice(1, 4),
+          current.admin() ? navData.slice(1, 5) : navData.slice(1, 4),
           {
             keyAttributes: "path",
           }
@@ -171,7 +171,6 @@ define([
 
     this.menuItemAction = (event) => {
       if (event.detail.selectedValue === "out") {
-        current.userLogin("");
         UserService.handleSignOut();
         router.go({ path: "login" }).then(function () {
           this.navigated = true;
