@@ -12,8 +12,12 @@ define([
   "knockout",
   "../context/userContext",
   "../services/userService",
+  "ojs/ojarraydataprovider",
   "ojs/ojknockout",
-], function (ko, UserContext, UserService) {
+  "ojs/ojlistview",
+  "ojs/ojavatar",
+  "ojs/ojinputsearch",
+], function (ko, UserContext, UserService, ArrayListDataProvider) {
   function UserlistViewModel(context) {
     var self = this;
     const authenticated = context.routerState.detail.authenticated();
@@ -27,6 +31,10 @@ define([
     self.refreshing = ko.observable(true);
     self.profileImage = profile.profileImage;
     self.userListData = ko.observableArray([]);
+    self.userListDataOriginal = ko.observableArray([]);
+    self.searchValue = ko.observable();
+    self.searchRawValue = ko.observable();
+    self.searchTerm = ko.observable();
 
     self.getUserList = async function () {
       self.refreshing(true);
@@ -35,7 +43,8 @@ define([
         const fileteredUsers = res.data.filter(
           (usr) => usr.email !== profile.email
         );
-        self.userListData(fileteredUsers);
+        self.userListDataOriginal(fileteredUsers);
+        self.userListData(self.userListDataOriginal());
         self.refreshing(false);
       } catch (e) {
         self.refreshing(false);
@@ -43,6 +52,26 @@ define([
     };
     self.getUserList();
     setInterval(() => self.getUserList(), 30 * 1000);
+
+    self.dataProvider = new ArrayListDataProvider(self.userListData, {
+      keyAttributes: "id",
+    });
+
+    self.handleValueAction = function (event) {
+      const value = event.detail.value;
+      if (value === "") {
+        self.userListData(self.userListDataOriginal());
+      }
+      self.userListData(
+        self
+          .userListDataOriginal()
+          .filter(
+            (usr) =>
+              usr.firstName.toLowerCase().includes(value.toLowerCase()) ||
+              usr.lastName.toLowerCase().includes(value.toLowerCase())
+          )
+      );
+    };
   }
 
   /*
