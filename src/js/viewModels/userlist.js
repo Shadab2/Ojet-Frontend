@@ -68,7 +68,8 @@ define([
           .filter(
             (usr) =>
               usr.firstName.toLowerCase().includes(value.toLowerCase()) ||
-              usr.lastName.toLowerCase().includes(value.toLowerCase())
+              usr.lastName.toLowerCase().includes(value.toLowerCase()) ||
+              usr.email.toLowerCase().includes(value.toLowerCase())
           )
       );
     };

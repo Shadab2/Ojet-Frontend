@@ -134,3 +134,7 @@ html[dir="rtl"] .demo-oracle-icon {
   opacity: 1;
   transform: scale(1);
 }
+
+.max-w-seventy-five {
+  max-width: 75% !important;
+}

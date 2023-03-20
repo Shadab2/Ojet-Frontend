@@ -55,19 +55,30 @@
               <oj-bind-text value="[[profile().mobileNo]]"></oj-bind-text>
             </span>
           </div>
-          <div class="flex items-center gap-2 my-2 shadow-md p-2 w-4/5">
-            <input type="file" on-change="[[handleFileChange]]" />
-            <oj-button
-              class="ml-auto"
-              disabled="[[!fileToUpload]]"
-              on-oj-action="[[handleProfileImageUpdate]]"
-            >
-              <span
-                class="oj-ux-ico-upload"
-                role="img"
-                aria-label="name"
+          <div class="flex gap-2">
+            <oj-file-picker
+              accept="[[Array.of('.jpeg','.png','.jpg')]]"
+              selection-mode="single"
+              on-oj-select="[[handleFileChange]]"
+              on-oj-invalid-select="[[invalidListener]]"
+              class="max-w-seventy-five"
+            ></oj-file-picker>
+            <div class="flex flex-col gap-2">
+              <span class="text-xs"
+                ><oj-bind-text value="[[fileToUpload()?.name]]"></oj-bind-text
               ></span>
-            </oj-button>
+              <oj-button
+                class="shadow--md p-2"
+                disabled="[[!fileToUpload]]"
+                on-oj-action="[[handleProfileImageUpdate]]"
+              >
+                <span
+                  class="oj-ux-ico-upload"
+                  role="img"
+                  aria-label="name"
+                ></span>
+              </oj-button>
+            </div>
           </div>
         </div>
       </div>

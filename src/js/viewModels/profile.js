@@ -18,6 +18,7 @@ define([
   "ojs/ojinputnumber",
   "ojs/ojbutton",
   "ojs/ojmessages",
+  "ojs/ojfilepicker",
   "ojs/ojknockout",
 ], function (ko, UserContext, UserService, ToastService) {
   function ProfileViewModel(context) {
@@ -59,9 +60,12 @@ define([
     };
 
     self.handleFileChange = function (e) {
-      self.fileToUpload(e.target.files[0]);
+      self.fileToUpload(e.detail.files[0]);
     };
 
+    self.invalidListener = function () {
+      self.messages([ToastService.error("Invalid File Type")]);
+    };
     self.handleProfileUpdate = async function () {
       if (
         self.editableFirstName() === "" ||

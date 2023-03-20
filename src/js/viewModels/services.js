@@ -8,10 +8,13 @@
 /*
  * Your incidents ViewModel code goes here
  */
-define(["knockout", "../services/userService", "ojs/ojknockout"], function (
-  ko,
-  UserService
-) {
+define([
+  "knockout",
+  "../services/userService",
+  "ojs/ojarraydataprovider",
+  "ojs/ojknockout",
+  "ojs/ojtable",
+], function (ko, UserService, ArrayDataProvider) {
   function ServicesViewModel(context) {
     const authenticated = context.routerState.detail.authenticated();
     const router = context.parentRouter;
@@ -54,6 +57,11 @@ define(["knockout", "../services/userService", "ojs/ojknockout"], function (
         console.log(e);
       }
     };
+
+    self.dataprovider = new ArrayDataProvider(self.restUserData, {
+      keyAttributes: "id",
+      implicitSort: [{ attribute: "id", direction: "ascending" }],
+    });
 
     self.downloadExcelUser = async (event, current, bindingContext) => {
       try {
