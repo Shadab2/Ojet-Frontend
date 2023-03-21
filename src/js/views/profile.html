@@ -128,4 +128,108 @@
       </oj-form-layout>
     </div>
   </div>
+  <div class="oj-sm-margin-3x-vertical py-5"></div>
+  <hr />
+  <div>
+    <div>
+      <h5>List of Saved Addresses</h5>
+      <div class="flex flex-wrap gap-6">
+        <oj-bind-for-each data="[[profile().addressList]]">
+          <template>
+            <div class="flex flex-col address-card p-2 shadow-lg rounded">
+              <span class="font-bold text-lg text-white"
+                >Address
+                <oj-bind-text
+                  value="[[($current.observableIndex()+1)]]"
+                ></oj-bind-text
+              ></span>
+              <div>
+                <hr class="bg-white" />
+                <span class="italic text-gray-300">Street: </span>
+                <p class="text-sm font-semibold text-stone-100">
+                  <oj-bind-text value="[[$current.data.street]]"></oj-bind-text>
+                </p>
+              </div>
+              <div>
+                <span class="italic text-gray-300">Country: </span>
+                <p class="text-sm font-semibold text-stone-100">
+                  <oj-bind-text
+                    value="[[$current.data.country]]"
+                  ></oj-bind-text>
+                </p>
+              </div>
+              <div>
+                <span class="italic text-gray-300">State: </span>
+                <p class="text-sm font-semibold text-stone-100">
+                  <oj-bind-text value="[[$current.data.state]]"></oj-bind-text>
+                </p>
+              </div>
+              <div>
+                <span class="italic text-gray-300">City: </span>
+                <p class="text-sm font-semibold text-stone-100">
+                  <oj-bind-text value="[[$current.data.city]]"></oj-bind-text>
+                </p>
+              </div>
+              <div>
+                <span class="italic text-gray-300">Modified at: </span>
+                <p class="text-sm font-semibold text-stone-100">
+                  <oj-bind-text
+                    value="[[$current.data.dateCreated]]"
+                  ></oj-bind-text>
+                </p>
+              </div>
+            </div>
+          </template>
+          <template slot="noData">
+            <span>You dont have any saved addresses add some!</span>
+          </template>
+        </oj-bind-for-each>
+      </div>
+    </div>
+    <h5>Add Address</h5>
+    <oj-form-layout
+      id="formLayoutOptions1"
+      max-columns="3"
+      direction="row"
+      user-assistance-density="compact"
+    >
+      <oj-select-single
+        id="select1"
+        data="[[countriesDataProvider]]"
+        value="{{address().country}}"
+        label-hint="Select a Country"
+        on-oj-value-action="[[onCountryValueChange]]"
+      ></oj-select-single>
+      <oj-select-single
+        id="select2"
+        data="[[statesDataProvider]]"
+        value="{{address().state}}"
+        label-hint="Select a State"
+        on-oj-value-action="[[onStateValueChange]]"
+        disabled="[[!address().country]]"
+      ></oj-select-single>
+      <oj-select-single
+        id="select3"
+        data="[[citiesDataProvider]]"
+        value="{{address().city}}"
+        label-hint="Select a City"
+        on-oj-value-action="[[onCityValueChange]]"
+        disabled="[[!address().state]]"
+      ></oj-select-single>
+    </oj-form-layout>
+    <oj-input-text
+      id="text-input-last"
+      value="{{address().street}}"
+      label-hint="Street Address"
+      label-edge="inside"
+      class="oj-form-control-width-lg oj-sm-margin-2x-bottom"
+    ></oj-input-text>
+    <oj-button
+      id="chroming_button4"
+      chroming="callToAction"
+      on-oj-action="[[handleAddressUpdate]]"
+      disabled="[[profile().addressList.length>2]]"
+      >Update</oj-button
+    >
+  </div>
 </div>

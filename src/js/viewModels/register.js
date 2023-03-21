@@ -12,13 +12,14 @@ define([
   "knockout",
   "../services/UserService",
   "../services/ToastService",
+  "ojs/ojasyncvalidator-regexp",
   "ojs/ojinputtext",
   "ojs/ojformlayout",
   "ojs/ojinputnumber",
   "ojs/ojbutton",
   "ojs/ojmessages",
   "ojs/ojknockout",
-], function (ko, UserService, ToastService) {
+], function (ko, UserService, ToastService, AsyncRegExpValidator) {
   function RegisterViewModel(context) {
     var self = this;
     const authenticated = context.routerState.detail.authenticated();
@@ -38,8 +39,23 @@ define([
     self.captchaValue = ko.observable(null);
     self.captchaId = ko.observable(null);
     self.invalidCaptcha = ko.observable(null);
-
     self.messages = ko.observableArray(null);
+
+    self.emailValidator = ko.observableArray([
+      new AsyncRegExpValidator({
+        pattern:
+          "[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*",
+        hint: "Enter a valid email format",
+        messageDetail: "Not a valid email format",
+      }),
+    ]);
+    self.phoneNumberValidator = ko.observableArray([
+      new AsyncRegExpValidator({
+        pattern: "^[+]?[(]?[0-9]{3}[)]?[-s.]?[0-9]{3}[-s.]?[0-9]{4,6}$",
+        hint: "enter a valid phone number",
+        messageDetail: "Not a valid Phone format",
+      }),
+    ]);
 
     self.getCaptcha = async function () {
       try {

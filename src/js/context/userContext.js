@@ -9,6 +9,7 @@ define(["knockout"], function (ko) {
     mobileNo: "",
     profileImage: null,
     role: null,
+    addressList: [],
   });
 
   self.authenticated = ko.computed(function () {
