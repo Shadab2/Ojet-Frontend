@@ -106,10 +106,10 @@ define([
         },
       },
       {
-        path: "userlist",
+        path: "dashboard",
         detail: {
-          label: "UserList",
-          iconClass: "oj-ux-ico-external-group-avatar",
+          label: "Dashboard",
+          iconClass: "oj-ux-ico-bar-chart",
           authenticated: current.authenticated,
         },
       },

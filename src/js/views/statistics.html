@@ -1,0 +1,63 @@
+<div class="p-2">
+  <div>
+    <h5 class="text-teal-700">Product Data</h5>
+    <oj-table
+      id="table"
+      aria-label="Departments Table"
+      accessibility.row-header="depName"
+      data="[[dataProvider]]"
+      selection-mode='{"row": "single", "column": "none"}'
+      dnd='{"reorder": {"columns": "enabled"}}'
+      scroll-policy="loadMoreOnScroll"
+      scroll-policy-options='{"fetchSize": 10}'
+      columns='[{"headerText": "Product Id", 
+                       "field": "id",
+                       "headerClassName": "oj-sm-only-hide",
+                       "className": "oj-sm-only-hide",
+                       "resizable": "enabled",
+                       "id": "productid"},
+                      {"headerText": "Product Name", 
+                       "field": "series",
+                       "resizable": "enabled",
+                       "id": "name"},
+                      {"headerText": "Total Sales", 
+                       "field": "value",
+                       "resizable": "enabled",
+                       "id": "total_sales"},
+                      {"headerText": "Total Revenue", 
+                       "field": "total_sales",
+                       "resizable": "enabled",
+                       "id": "value"}
+                      ]'
+      class="demo-table-container oj-sm-width-full"
+    ></oj-table>
+  </div>
+  <hr />
+  <div>
+    <h5 class="text-teal-700">Pie Chart</h5>
+    <div id="char-container">
+      <oj-chart
+        id="pieChart"
+        type="pie"
+        data="[[dataProvider]]"
+        style-defaults.three-d-effect="[[isChecked()?'on':'off']]"
+        animation-on-display="auto"
+        animation-on-data-change="auto"
+        hover-behavior="dim"
+      >
+        <template slot="itemTemplate" data-oj-as="item">
+          <oj-chart-item
+            value="[[item.data.value]]"
+            group-id="[[ [item.data.group] ]]"
+            series-id="[[item.data.series]]"
+          ></oj-chart-item>
+        </template>
+      </oj-chart>
+      <oj-switch
+        id="enabledSwitchOn"
+        value="{{isChecked}}"
+        label-hint="3D"
+      ></oj-switch>
+    </div>
+  </div>
+</div>

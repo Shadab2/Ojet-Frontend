@@ -18,15 +18,8 @@ define([
   "ojs/ojavatar",
   "ojs/ojinputsearch",
 ], function (ko, UserContext, UserService, ArrayListDataProvider) {
-  function UserlistViewModel(context) {
+  function UserlistViewModel(params) {
     var self = this;
-    const authenticated = context.routerState.detail.authenticated();
-    const router = context.parentRouter;
-    if (!authenticated) {
-      router.go({ path: "login" }).then(function () {
-        this.navigated = true;
-      });
-    }
     const profile = UserContext.user();
     self.refreshing = ko.observable(true);
     self.profileImage = profile.profileImage;

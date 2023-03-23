@@ -18,5 +18,8 @@
   "engines": {
     "node": ">=12.21.0"
   },
+  "scripts": {
+    "tailwind": "npx tailwindcss -i ./src/css/input.css -o ./src/dist/output.css --watch"
+  },
   "private": true
 }

@@ -98,7 +98,13 @@ define(["../context/userContext", "axios"], function (UserContext, axios) {
 
     fetchUserList() {
       const authToken = UserContext.authToken();
-      return axios.get(this.baseUrl + "/user/all", {
+      return axios.get(this.baseUrl + "/admin/users", {
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+    }
+    fetchSalesData() {
+      const authToken = UserContext.authToken();
+      return axios.get(this.baseUrl + "/admin/sales-data", {
         headers: { Authorization: `Bearer ${authToken}` },
       });
     }

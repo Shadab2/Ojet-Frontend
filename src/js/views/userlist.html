@@ -3,63 +3,53 @@
  Licensed under The Universal Permissive License (UPL), Version 1.0
  as shown at https://oss.oracle.com/licenses/upl/
  -->
-<div class="oj-hybrid-padding">
-  <h1>User List</h1>
-  <div class= min-h-screen w-[90%] pt-10 relative">
-   
-    <div
-      class="absolute bg-blue-600 w-[100px] text-white text-xs p-2 left-0 transition-all"
-      style="border-top-right-radius: 5px; border-bottom-right-radius: 5px"
-      data-bind="css:{'translate-x-0':refreshing,'translate-x-[-100px]':!refreshing()}"
+
+<div class="mx-auto relative w-full overflow-hidden">
+  <div
+    class="absolute bg-blue-600 w-[100px] text-white text-xs p-2 left-0 transition-all"
+    style="border-top-right-radius: 5px; border-bottom-right-radius: 5px"
+    data-bind="css:{'translate-x-0':refreshing,'translate-x-[-120px]':!refreshing()}"
+  >
+    Refreshing...
+  </div>
+  <div
+    class="flex flex-col bg-white shadow-md min-h-[400px] w-4/5 ml-auto text-left p-6"
+  >
+    <oj-input-search
+      id="search1"
+      class="oj-form-control-max-width-lg border-none shadow-none"
+      value="{{searchValue}}"
+      raw-value="{{searchRawValue}}"
+      on-oj-value-action="[[handleValueAction]]"
+      placeholder="Search..."
+      aria-label="User search field"
+    ></oj-input-search>
+    <hr />
+    <oj-list-view
+      id="listview"
+      aria-label="user list"
+      data="[[dataProvider]]"
+      class="oj-listview-item-padding-off"
     >
-      Refreshing...
-    </div>
-  
-    <div class="w-4/5 mx-auto p-4 oj-flex bg-white oj-sm-margin-4x-vertical rounded-sm shadow-md">
-      <div class="oj-sm-6">
-            <oj-avatar slot="leading" size="xs" src="[[profileImage]]"></oj-avatar>
+      <template slot="itemTemplate" data-oj-as="item">
+        <div class="flex gap-3 items-center hover:bg-slate-100 cursor-pointer">
+          <oj-avatar
+            slot="leading"
+            size="xs"
+            src="[[$current.data.profileImage?`data:image/png;base64,${$current.data.profileImage}`:`https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQA7J_nWmuLQLoOtHyvwRXfkrkVvW621Bx9nQ&usqp=CAU`]]"
+          ></oj-avatar>
+          <div class="my-3 font-sans flex flex-col gap-1">
+            <span class="font-semibold text-teal-600">
+              <oj-bind-text
+                value="[[$current.data.firstName+' '+$current.data.lastName]]"
+              ></oj-bind-text>
+            </span>
+            <span class="text-sm"
+              ><oj-bind-text value="[[$current.data.email]]"></oj-bind-text
+            ></span>
+          </div>
         </div>
-        <oj-input-search
-                id="search1"
-                class="oj-form-control-max-width-md border-none shadow-none"
-                value="{{searchValue}}"
-                raw-value="{{searchRawValue}}"
-                on-oj-value-action="[[handleValueAction]]"
-                placeholder="Search..."
-                aria-label="User search field"></oj-input-search>
-    </div>
-      <div class="flex gap-5 mx-auto w-4/5">
-        <div
-          class="flex flex-col flex-[0.4] bg-white shadow-md rounded-md min-h-[400px] text-left px-4 py-2"
-        >
-          <span class="font-semi-bold text-gray-500 my-2">Users</span>
-          <hr />
-          <oj-list-view
-            id="listview"
-            aria-label="user list"
-            data="[[dataProvider]]"
-            class="oj-listview-item-padding-off">
-            <template slot="itemTemplate" data-oj-as="item">
-               <div
-                  class="flex gap-3 items-center hover:bg-slate-100 cursor-pointer"
-                >
-                  <oj-avatar slot="leading" size="xs" src="[[$current.data.profileImage?`data:image/png;base64,${$current.data.profileImage}`:`https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQA7J_nWmuLQLoOtHyvwRXfkrkVvW621Bx9nQ&usqp=CAU`]]"></oj-avatar> 
-                  <div class="my-3 font-sans flex flex-col gap-1">
-                    <span class="font-semibold text-teal-600">
-                      <oj-bind-text value="[[$current.data.firstName+' '+$current.data.lastName]]"></oj-bind-text>
-                    </span>
-                    <span class=" text-sm"><oj-bind-text value="[[$current.data.email]]"></oj-bind-text></span>
-                  </div>
-                </div>
-            </template>
-          </oj-list-view>
-        </div>
-        <div
-          class="flex-[0.6] bg-white shadow-md rounded-md min-h-[400px]"
-        >
-      
-      </div>
-      </div>
-    </div>
+      </template>
+    </oj-list-view>
   </div>
 </div>
