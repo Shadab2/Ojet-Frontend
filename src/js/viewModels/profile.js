@@ -39,6 +39,14 @@ define([
     self.editableLastName = ko.observable(self.profile().lastName);
     self.editableMobileNo = ko.observable(self.profile().mobileNo);
 
+    self.updateButtonEnable = ko.computed(function () {
+      return (
+        self.profile().firstName !== self.editableFirstName() ||
+        self.profile().lastName !== self.editableLastName() ||
+        self.profile().mobileNo !== self.editableMobileNo()
+      );
+    });
+
     self.messages = ko.observableArray(null);
     self.address = ko.observable({
       country: "",

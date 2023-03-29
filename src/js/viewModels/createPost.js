@@ -177,7 +177,6 @@ define([
             link: self.link2().link,
           });
         self.post(post);
-        console.log(self.post());
       }
       self.selectedValue(self.stepArray()[index]);
     };

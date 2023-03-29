@@ -16,16 +16,22 @@ define(["../context/userContext", "axios"], function (UserContext, axios) {
         formData.append("files", file);
       }
 
-      const url = post.files.length > 0 ? this.baseUrl : this.baseUrl + "/add";
       formData.append("resourcePost", blob);
       return axios({
         method: "post",
-        url,
+        url: this.baseUrl,
         data: formData,
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${authToken}`,
         },
+      });
+    }
+
+    fetchAllPublicPosts() {
+      const authToken = UserContext.authToken();
+      return axios.get(this.baseUrl + "/all", {
+        headers: { Authorization: `Bearer ${authToken}` },
       });
     }
   }

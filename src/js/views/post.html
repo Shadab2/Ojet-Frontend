@@ -2,12 +2,15 @@
   <div class="flex items-center justify-between">
     <div class="flex items-center gap-2">
       <img
-        :src="[[user().profileImage]]"
+        :src="[[user.profileImage]]"
         alt=""
         class="h-8 w-8 rounded-full object-cover"
       />
       <span class="font-semibold text-lg"
         ><oj-bind-text value="[[username]]"></oj-bind-text
+      ></span>
+      <span class="text-xs ml-2" style="transform: translateY(3px)"
+        ><oj-bind-text value="[[date]]"></oj-bind-text
       ></span>
     </div>
     <span
@@ -39,8 +42,10 @@
               value="[[resourceLinks()[0].description || 'Link1']]"
             ></oj-bind-text
           ></span>
-          <p class="italic text-indigo-500">
-            <oj-bind-text value="[[resourceLinks()[0].link]]"></oj-bind-text>
+          <p class="italic text-indigo-500 break-words">
+            <a :href="[[resourceLinks()[0].link]]">
+              <oj-bind-text value="[[resourceLinks()[0].link]]"></oj-bind-text>
+            </a>
           </p>
         </oj-collapsible>
       </oj-accordion>
@@ -52,8 +57,12 @@
                 value="[[resourceLinks()[1].description || 'Link1']]"
               ></oj-bind-text
             ></span>
-            <p class="italic text-indigo-500">
-              <oj-bind-text value="[[resourceLinks()[1].link]]"></oj-bind-text>
+            <p class="italic text-indigo-500 break-words">
+              <a :href="[[resourceLinks()[1].link]]">
+                <oj-bind-text
+                  value="[[resourceLinks()[1].link]]"
+                ></oj-bind-text>
+              </a>
             </p>
           </oj-collapsible>
         </oj-accordion>
@@ -70,7 +79,22 @@
   </oj-bind-if>
   <hr />
   <div class="bg-gray-100 my-2 p-3 flex items-center justify-between">
-    <span class="oj-ux-ico-thumbs-up text-lg" role="img"></span>
-    <span class="decoration-dotted text-indigo-500">Comments</span>
+    <div class="flex items-center gap-2">
+      <span
+        class="oj-ux-ico-thumbs-up text-lg cursor-pointer"
+        role="img"
+      ></span>
+      <span class="text-sm font-bold"
+        ><oj-bind-text
+          value="[[postFeedback().upvotesCount+' upvotes']]"
+        ></oj-bind-text
+      ></span>
+    </div>
+    <div
+      class="flex items-center gap-1 text-indigo-500 cursor-pointer font-semibold"
+    >
+      <span>5</span>
+      <span class="border-b border-b-slate-300 border-dashed">Comments</span>
+    </div>
   </div>
 </div>

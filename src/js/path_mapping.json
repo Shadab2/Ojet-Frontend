@@ -56,6 +56,20 @@
         "cdnPath": "axios/axios-1.2.3.min"
       }
     },
+    "timeago": {
+      "cdn": "timeago.js",
+      "cwd": "node_modules/timeago.js/dist",
+      "debug": {
+        "src": "timeago.min.js",
+        "path": "libs/timeago/timeago.min.js",
+        "cdnPath": "timeago/timeago"
+      },
+      "release": {
+        "src": "timeago.min.js",
+        "path": "libs/timeago/timeago.min.js",
+        "cdnPath": "timeago/timeago"
+      }
+    },
 
     "jqueryui-amd": {
       "cdn": "3rdparty",
