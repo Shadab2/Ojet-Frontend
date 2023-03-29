@@ -73,6 +73,16 @@ html[dir="rtl"] .demo-oracle-icon {
   position: relative;
 }
 
+.bg-gradient-red {
+  background-image: linear-gradient(
+    to right top,
+    #c6340d,
+    #d42a26,
+    #e11f3b,
+    #eb1451,
+    #f30e67
+  );
+}
 .bg-wave {
   position: absolute;
   bottom: 0;

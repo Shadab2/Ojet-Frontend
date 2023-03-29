@@ -12,6 +12,17 @@ define(["knockout"], function (ko) {
     addressList: [],
   });
 
+  self.init = function () {
+    const userData = window.localStorage.getItem("training_user");
+    if (userData) {
+      const userDataParsed = JSON.parse(userData);
+      self.user(userDataParsed.user);
+      self.authToken(userDataParsed.authToken);
+    }
+  };
+
+  self.init();
+
   self.authenticated = ko.computed(function () {
     return self.authToken() !== "";
   });
@@ -32,8 +43,19 @@ define(["knockout"], function (ko) {
         : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQA7J_nWmuLQLoOtHyvwRXfkrkVvW621Bx9nQ&usqp=CAU";
     }
     self.user(updatedProfile);
+    self.updateLocalStorage();
   };
 
+  self.updateLocalStorage = function () {
+    console.log("updating");
+    window.localStorage.setItem(
+      "training_user",
+      JSON.stringify({
+        user: self.user(),
+        authToken: self.authToken(),
+      })
+    );
+  };
   self.updateToken = function (authTokenFromBackend) {
     self.authToken(authTokenFromBackend);
   };

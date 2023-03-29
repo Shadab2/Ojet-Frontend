@@ -1,0 +1,76 @@
+<div class="w-[80%] mx-auto p-3 bg-white shadow-lg rounded-md">
+  <div class="flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <img
+        :src="[[user().profileImage]]"
+        alt=""
+        class="h-8 w-8 rounded-full object-cover"
+      />
+      <span class="font-semibold text-lg"
+        ><oj-bind-text value="[[username]]"></oj-bind-text
+      ></span>
+    </div>
+    <span
+      class="oj-ux-ico-three-boxes-vertical text-[#4264b2]"
+      role="img"
+    ></span>
+  </div>
+  <hr />
+  <h6 class="italic text-[#1ea70c]">
+    <oj-bind-text value="[[post.title]]"></oj-bind-text>
+  </h6>
+  <oj-bind-for-each data="[[post.techStacks]]">
+    <template>
+      <span class="bg-gray-100 rounded-sm p-1 text-xs mr-2">
+        <oj-bind-text value="[[$current.data.name]]"></oj-bind-text>
+      </span>
+    </template>
+  </oj-bind-for-each>
+  <p class="text-gray-700 my-3 text-sm">
+    <oj-bind-text value="[[post.description]]"></oj-bind-text>
+  </p>
+  <oj-bind-if test="[[resourceLinks().length>0]]">
+    <div>
+      <span class="font-semibold text-lg my-2 text-blue-700">Links</span>
+      <oj-accordion id="a1">
+        <oj-collapsible id="c1">
+          <span slot="header"
+            ><oj-bind-text
+              value="[[resourceLinks()[0].description || 'Link1']]"
+            ></oj-bind-text
+          ></span>
+          <p class="italic text-indigo-500">
+            <oj-bind-text value="[[resourceLinks()[0].link]]"></oj-bind-text>
+          </p>
+        </oj-collapsible>
+      </oj-accordion>
+      <oj-bind-if test="[[resourceLinks().length > 1]]">
+        <oj-accordion id="a2">
+          <oj-collapsible id="c2">
+            <span slot="header"
+              ><oj-bind-text
+                value="[[resourceLinks()[1].description || 'Link1']]"
+              ></oj-bind-text
+            ></span>
+            <p class="italic text-indigo-500">
+              <oj-bind-text value="[[resourceLinks()[1].link]]"></oj-bind-text>
+            </p>
+          </oj-collapsible>
+        </oj-accordion>
+      </oj-bind-if>
+    </div>
+  </oj-bind-if>
+  <oj-bind-if test="[[postimages().length>0]]">
+    <img
+      :src="[[image]]"
+      alt=""
+      data-bind="click:handleImageChange"
+      class="cursor-pointer w-full h-[300px] object-contain"
+    />
+  </oj-bind-if>
+  <hr />
+  <div class="bg-gray-100 my-2 p-3 flex items-center justify-between">
+    <span class="oj-ux-ico-thumbs-up text-lg" role="img"></span>
+    <span class="decoration-dotted text-indigo-500">Comments</span>
+  </div>
+</div>
