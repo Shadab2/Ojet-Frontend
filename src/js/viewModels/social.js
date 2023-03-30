@@ -31,6 +31,7 @@ define([
     const navigationData = [
       { name: "Home", id: "home", icons: "oj-ux-ico-home" },
       { name: "Create", id: "create", icons: "oj-ux-ico-library-add" },
+      { name: "Upvoted", id: "upvoted", icons: "oj-ux-ico-content-item-list" },
       {
         name: "Message",
         id: "message",

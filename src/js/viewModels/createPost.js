@@ -188,7 +188,7 @@ define([
         self.loading(false);
         self.activeTab("home");
       } catch (e) {
-        self.messages([ToastService.error("Cannot Post! Check your post")]);
+        self.loading(false);
         console.log(e);
       }
     };

@@ -86,6 +86,9 @@
       <oj-bind-if test="[[activeTab()==='create']]">
         <div data-bind="ojModule:{name:'createPost',params:{activeTab}}"></div>
       </oj-bind-if>
+      <oj-bind-if test="[[activeTab()==='upvoted']]">
+        <div data-bind="ojModule:{name:'upvotedPost',params:{activeTab}}"></div>
+      </oj-bind-if>
     </div>
     <div class="flex-[0.25]">Right Bar</div>
   </div>

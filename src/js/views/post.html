@@ -81,7 +81,8 @@
   <div class="bg-gray-100 my-2 p-3 flex items-center justify-between">
     <div class="flex items-center gap-2">
       <span
-        class="oj-ux-ico-thumbs-up text-lg cursor-pointer"
+        class="text-lg cursor-pointer transition-all"
+        data-bind="click:handleUpvote,css:{'oj-ux-ico-thumbs-up-s text-teal-600 scale-125':upvoted,'oj-ux-ico-thumbs-up':!upvoted()}"
         role="img"
       ></span>
       <span class="text-sm font-bold"
@@ -92,9 +93,80 @@
     </div>
     <div
       class="flex items-center gap-1 text-indigo-500 cursor-pointer font-semibold"
+      data-bind="click:handleCommentVisibility"
     >
-      <span>5</span>
+      <span>
+        <oj-bind-text value="[[postFeedback().commentsCount]]"></oj-bind-text>
+      </span>
       <span class="border-b border-b-slate-300 border-dashed">Comments</span>
     </div>
   </div>
+  <oj-bind-if test="[[commentVisible]]">
+    <div class="p-2 shadow-md transition-all">
+      <div class="oj-flex items-center justify-between">
+        <span class="font-semibold text-teal-600">Comments</span>
+        <span
+          class="oj-ux-ico-comment-add text-xl text-teal-600 cursor-pointer"
+          data-bind="click:modalOpen"
+        ></span>
+      </div>
+      <oj-bind-for-each data="[[postFeedback().commentsList]]">
+        <template>
+          <div class="flex gap-2 my-2">
+            <div>
+              <img
+                :src="[[$current.data.userProfileImage?'data:image/jpeg;base64,'+$current.data.userProfileImage:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQA7J_nWmuLQLoOtHyvwRXfkrkVvW621Bx9nQ&usqp=CAU']]"
+                class="h-6 w-6 rounded-full object-cover"
+              />
+            </div>
+            <div class="flex flex-col gap-2 bg-gray-300 p-2 rounded-md">
+              <div class="flex items-center justify-between min-w-[180px]">
+                <span class="text-xs font-semibold" style="font-family: cursive"
+                  ><oj-bind-text
+                    value="[[$current.data.userName]]"
+                  ></oj-bind-text
+                ></span>
+                <span class="text-xs">
+                  <oj-bind-text
+                    value="[[formatDate($current.data.dateModified)]]"
+                  ></oj-bind-text>
+                </span>
+              </div>
+              <span class="text-sm"
+                ><oj-bind-text value="[[$current.data.message]]"></oj-bind-text
+              ></span>
+            </div>
+          </div>
+        </template>
+        <template slot="noData">
+          <div class="p-8 text-gray-200">No comments!!</div>
+        </template>
+      </oj-bind-for-each>
+    </div>
+  </oj-bind-if>
+
+  <oj-dialog
+    id="modalDialog1"
+    dialog-title="Add Comments"
+    aria-describedby="desc"
+  >
+    <div slot="body">
+      <oj-input-text
+        id="it2"
+        label-hint="Add meaningful comments"
+        label-edge="none"
+        placeholder="Add your comments here"
+        value="{{commentVal}}"
+      ></oj-input-text>
+    </div>
+    <div slot="footer">
+      <oj-button id="okButton" on-oj-action="[[closeModal]]">Cancel</oj-button>
+      <oj-button
+        id="okButton"
+        disabled="[[commentButtonDisable]]"
+        on-oj-action="[[submitComment]]"
+        >Post Comment</oj-button
+      >
+    </div>
+  </oj-dialog>
 </div>

@@ -8,34 +8,24 @@ define([
     var self = this;
     self.activeTab = params.activeTab;
     self.posts = ko.observableArray([]);
+    self.likedPostsIds = ko.observable(new Set());
     self.user = UserContext.user;
 
+    self.getUpvotedPosts = async function () {
+      try {
+        const res = await PostService.fetchAllUpvotedPosts();
+        const newSet = new Set();
+        res.data.forEach((ps) => newSet.add(ps.id));
+        self.likedPostsIds(newSet);
+      } catch (e) {}
+    };
+
+    self.getUpvotedPosts();
     self.getAllPublicPosts = async function () {
       try {
         const res = await PostService.fetchAllPublicPosts();
         let data = res.data.map((ps) => {
-          return {
-            post: {
-              id: ps.id,
-              title: ps.title,
-              description: ps.description,
-              images: ps.postImages.map(
-                (file) => "data:image/jpeg;base64," + file.base64Image
-              ),
-              techStacks: ps.techStacks,
-              resourceLinks: ps.resourceLinks,
-              dateModified: ps.dateModified,
-              postFeedBack: ps.postFeedBack,
-              type: "Completed",
-            },
-            user: {
-              firstName: ps.user.firstName,
-              lastName: ps.user.lastName,
-              profileImage: ps.user.profileImage
-                ? "data:image/jpeg;base64," + ps.user.profileImage
-                : UserContext.avatar,
-            },
-          };
+          return PostService.parsePostData(ps, self.likedPostsIds());
         });
         self.posts(data);
       } catch (e) {
@@ -44,6 +34,13 @@ define([
     };
 
     self.getAllPublicPosts();
+
+    setInterval(() => {
+      (async function () {
+        await self.getUpvotedPosts();
+        self.getAllPublicPosts();
+      })();
+    }, 60 * 1000);
   }
   return SocialHomeViewModel;
 });
