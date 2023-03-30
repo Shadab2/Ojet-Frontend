@@ -1,0 +1,172 @@
+<div class="w-[80%] mx-auto p-3 bg-white shadow-lg rounded-md">
+  <div class="flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <img
+        :src="[[user.profileImage]]"
+        alt=""
+        class="h-8 w-8 rounded-full object-cover"
+      />
+      <span class="font-semibold text-lg"
+        ><oj-bind-text value="[[username]]"></oj-bind-text
+      ></span>
+      <span class="text-xs ml-2" style="transform: translateY(3px)"
+        ><oj-bind-text value="[[date]]"></oj-bind-text
+      ></span>
+    </div>
+    <span
+      class="oj-ux-ico-three-boxes-vertical text-[#4264b2]"
+      role="img"
+    ></span>
+  </div>
+  <hr />
+  <h6 class="italic" :class="[[titleClass]]">
+    <oj-bind-text value="[[post.title]]"></oj-bind-text>
+  </h6>
+  <oj-bind-for-each data="[[post.techStacks]]">
+    <template>
+      <span class="bg-gray-100 rounded-sm p-1 text-xs mr-2">
+        <oj-bind-text value="[[$current.data.name]]"></oj-bind-text>
+      </span>
+    </template>
+  </oj-bind-for-each>
+  <p class="text-gray-700 my-3 text-sm">
+    <oj-bind-text value="[[post.description]]"></oj-bind-text>
+  </p>
+  <oj-bind-if test="[[resourceLinks().length>0]]">
+    <div>
+      <span class="font-semibold text-lg my-2 text-blue-700">Links</span>
+      <oj-accordion id="a1">
+        <oj-collapsible id="c1">
+          <span slot="header"
+            ><oj-bind-text
+              value="[[resourceLinks()[0].description || 'Link1']]"
+            ></oj-bind-text
+          ></span>
+          <p class="italic text-indigo-500 break-words">
+            <a :href="[[resourceLinks()[0].link]]">
+              <oj-bind-text value="[[resourceLinks()[0].link]]"></oj-bind-text>
+            </a>
+          </p>
+        </oj-collapsible>
+      </oj-accordion>
+      <oj-bind-if test="[[resourceLinks().length > 1]]">
+        <oj-accordion id="a2">
+          <oj-collapsible id="c2">
+            <span slot="header"
+              ><oj-bind-text
+                value="[[resourceLinks()[1].description || 'Link1']]"
+              ></oj-bind-text
+            ></span>
+            <p class="italic text-indigo-500 break-words">
+              <a :href="[[resourceLinks()[1].link]]">
+                <oj-bind-text
+                  value="[[resourceLinks()[1].link]]"
+                ></oj-bind-text>
+              </a>
+            </p>
+          </oj-collapsible>
+        </oj-accordion>
+      </oj-bind-if>
+    </div>
+  </oj-bind-if>
+  <oj-bind-if test="[[postimages().length>0]]">
+    <img
+      :src="[[image]]"
+      alt=""
+      data-bind="click:handleImageChange"
+      class="cursor-pointer w-full h-[300px] object-contain"
+    />
+  </oj-bind-if>
+  <hr />
+  <div class="bg-gray-100 my-2 p-3 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <span
+        class="text-lg cursor-pointer transition-all"
+        data-bind="click:handleUpvote,css:{'oj-ux-ico-thumbs-up-s text-teal-600 scale-125':upvoted,'oj-ux-ico-thumbs-up':!upvoted()}"
+        role="img"
+      ></span>
+      <span class="text-sm font-bold"
+        ><oj-bind-text
+          value="[[postFeedback().upvotesCount+' upvotes']]"
+        ></oj-bind-text
+      ></span>
+    </div>
+    <div
+      class="flex items-center gap-1 text-indigo-500 cursor-pointer font-semibold"
+      data-bind="click:handleCommentVisibility"
+    >
+      <span>
+        <oj-bind-text value="[[postFeedback().commentsCount]]"></oj-bind-text>
+      </span>
+      <span class="border-b border-b-slate-300 border-dashed">Comments</span>
+    </div>
+  </div>
+  <oj-bind-if test="[[commentVisible]]">
+    <div class="p-2 shadow-md transition-all">
+      <div class="oj-flex items-center justify-between">
+        <span class="font-semibold text-teal-600">Comments</span>
+        <span
+          class="oj-ux-ico-comment-add text-xl text-teal-600 cursor-pointer"
+          data-bind="click:modalOpen"
+        ></span>
+      </div>
+      <oj-bind-for-each data="[[postFeedback().commentsList]]">
+        <template>
+          <div class="flex gap-2 my-2">
+            <div>
+              <img
+                :src="[[$current.data.userProfileImage?'data:image/jpeg;base64,'+$current.data.userProfileImage:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQA7J_nWmuLQLoOtHyvwRXfkrkVvW621Bx9nQ&usqp=CAU']]"
+                class="h-6 w-6 rounded-full object-cover"
+              />
+            </div>
+            <div class="flex flex-col gap-2 bg-gray-300 p-2 rounded-md">
+              <div class="flex items-center justify-between min-w-[180px]">
+                <span class="text-xs font-semibold" style="font-family: cursive"
+                  ><oj-bind-text
+                    value="[[$current.data.userName]]"
+                  ></oj-bind-text
+                ></span>
+                <span class="text-xs">
+                  <oj-bind-text
+                    value="[[formatDate($current.data.dateModified)]]"
+                  ></oj-bind-text>
+                </span>
+              </div>
+              <span class="text-sm"
+                ><oj-bind-text value="[[$current.data.message]]"></oj-bind-text
+              ></span>
+            </div>
+          </div>
+        </template>
+        <template slot="noData">
+          <div class="p-8 text-gray-200">No comments!!</div>
+        </template>
+      </oj-bind-for-each>
+    </div>
+  </oj-bind-if>
+
+  <oj-dialog
+    id="modalDialog1"
+    dialog-title="Add Comments"
+    aria-describedby="desc"
+  >
+    <div slot="body">
+      <oj-input-text
+        id="it2"
+        label-hint="Add meaningful comments"
+        label-edge="none"
+        placeholder="Add your comments here"
+        value="{{commentVal}}"
+      ></oj-input-text>
+    </div>
+    <div slot="footer">
+      <oj-button id="okButton" on-oj-action="[[closeModal]]">Cancel</oj-button>
+      <oj-button
+        id="okButton"
+        disabled="[[commentButtonDisable]]"
+        on-oj-action="[[submitComment]]"
+        >Post Comment</oj-button
+      >
+    </div>
+  </oj-dialog>
+</div>

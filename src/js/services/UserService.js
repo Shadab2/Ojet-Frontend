@@ -64,9 +64,47 @@ define(["../context/userContext", "axios"], function (UserContext, axios) {
       });
     }
 
+    updateUserAddress(address) {
+      const authToken = UserContext.authToken();
+      return axios.post(
+        this.baseUrl + "/user/address",
+        { ...address, dateCreated: new Date().toISOString() },
+        {
+          headers: { Authorization: `Bearer ${authToken}` },
+        }
+      );
+    }
+
+    fetchCountryAddressList() {
+      const authToken = UserContext.authToken();
+      return axios.get(this.baseUrl + "/utility/countries", {
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+    }
+
+    fetchStateAddressList(country) {
+      const authToken = UserContext.authToken();
+      return axios.get(this.baseUrl + "/utility/states/" + country, {
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+    }
+
+    fetchCityAddressList(state) {
+      const authToken = UserContext.authToken();
+      return axios.get(this.baseUrl + "/utility/cities/" + state, {
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+    }
+
     fetchUserList() {
       const authToken = UserContext.authToken();
-      return axios.get(this.baseUrl + "/user/all", {
+      return axios.get(this.baseUrl + "/admin/users", {
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+    }
+    fetchSalesData() {
+      const authToken = UserContext.authToken();
+      return axios.get(this.baseUrl + "/admin/sales-data", {
         headers: { Authorization: `Bearer ${authToken}` },
       });
     }

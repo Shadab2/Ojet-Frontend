@@ -106,10 +106,18 @@ define([
         },
       },
       {
-        path: "userlist",
+        path: "social",
         detail: {
-          label: "UserList",
-          iconClass: "oj-ux-ico-external-group-avatar",
+          label: "Feeds",
+          iconClass: "oj-ux-ico-blog-post-detail",
+          authenticated: current.authenticated,
+        },
+      },
+      {
+        path: "dashboard",
+        detail: {
+          label: "Dashboard",
+          iconClass: "oj-ux-ico-bar-chart",
           authenticated: current.authenticated,
         },
       },
@@ -145,13 +153,13 @@ define([
     this.navDataProvider = ko.computed(function () {
       if (current.authenticated()) {
         return new ArrayDataProvider(
-          current.admin() ? navData.slice(1, 5) : navData.slice(1, 4),
+          current.admin() ? navData.slice(1, 6) : navData.slice(1, 5),
           {
             keyAttributes: "path",
           }
         );
       } else
-        return new ArrayDataProvider(navData.slice(5), {
+        return new ArrayDataProvider(navData.slice(6), {
           keyAttributes: "path",
         });
     });

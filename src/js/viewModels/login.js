@@ -50,6 +50,7 @@ define([
             mobileNo: jsonData.mobileNo,
             profileImage: jsonData.profileImage,
             role: jsonData.role,
+            addressList: jsonData.addressList,
           },
           jsonData.token,
           true

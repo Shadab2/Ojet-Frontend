@@ -49,6 +49,7 @@
         axios: "libs/axios/axios-1.2.3",
         touchr: "libs/touchr/touchr",
         chai: "libs/chai/chai-4.3.7",
+        timeago: "libs/timeago/timeago",
       },
     // endinjector
   });

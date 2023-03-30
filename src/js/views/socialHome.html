@@ -1,0 +1,48 @@
+<div>
+  <div class="w-[80%] rounded-md shadow-md mx-auto my-3">
+    <div class="flex items-center gap-3 p-4">
+      <img
+        :src="[[user().profileImage]]"
+        alt="Profile Image"
+        class="w-[60px] h-[60px] object-cover rounded-full"
+      />
+      <span class="text-gray-600 opacity-70">What you want to share?</span>
+    </div>
+    <div class="flex items-center gap-4 p-2">
+      <div class="flex items-center font-semibold text-sm">
+        <span class="oj-ux-ico-file-image text-red-600" role="img"></span>
+        Images
+      </div>
+      <div class="flex items-center font-semibold text-sm">
+        <span class="oj-ux-ico-file-image text-teal-600" role="img"></span>
+        Ideas
+      </div>
+      <div class="flex items-center font-semibold text-sm">
+        <span class="oj-ux-ico-event-note text-blue-600" role="img"></span>
+        Note
+      </div>
+      <div class="flex items-center font-semibold text-sm">
+        <span class="oj-ux-ico-attach-file text-sky-600" role="img"></span>
+        Links
+      </div>
+      <oj-button
+        class="w-[100px] ml-auto"
+        on-oj-action="[[()=>activeTab('create')]]"
+      >
+        Create
+      </oj-button>
+    </div>
+  </div>
+  <oj-bind-if test="[[posts().length==0]]">
+    <div data-bind="ojModule:{name:'loadingPost'}"></div>
+  </oj-bind-if>
+  <div class="flex flex-col gap-2">
+    <oj-bind-for-each data="[[posts]]">
+      <template data-oj-as="post">
+        <div
+          data-bind="ojModule:{name:'Post',params:{post:post.data.post  ,user:post.data.user}}"
+        ></div>
+      </template>
+    </oj-bind-for-each>
+  </div>
+</div>

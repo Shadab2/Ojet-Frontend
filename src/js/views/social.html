@@ -1,0 +1,95 @@
+<div class="pt-2">
+  <div
+    class="oj-flex p-3 items-center justify-between h-[70px] w-full mb-2 bg-teal-600 sticky top-0 z-10"
+  >
+    <span class="text-white text-2xl font-bold">Oracle Share</span>
+    <oj-input-search
+      id="search1"
+      class="oj-form-control-max-width-md border-none shadow-none"
+      value="{{searchValue}}"
+      raw-value="{{searchRawValue}}"
+      on-oj-value-action="[[handleValueAction]]"
+      placeholder="Search Posts..."
+      aria-label="User search field"
+    ></oj-input-search>
+    <div class="flex items-center">
+      <div class="flex items-center gap-3 mr-8">
+        <div class="relative">
+          <span
+            class="oj-ux-ico-notification text-white text-2xl"
+            role="img"
+            aria-label="notification"
+          ></span>
+          <div
+            class="absolute h-4 w-4 text-white rounded-full bg-red-600 grid place-content-center text-xs top-[-8px] right-[-2px]"
+          >
+            3
+          </div>
+        </div>
+        <div class="relative">
+          <span
+            class="oj-ux-ico-user-available text-white text-2xl"
+            role="img"
+            aria-label="user"
+          ></span>
+          <div
+            class="absolute h-4 w-4 text-white rounded-full bg-red-600 grid place-content-center text-xs top-[-8px] right-[-2px]"
+          >
+            2
+          </div>
+        </div>
+        <div class="relative">
+          <span
+            class="oj-ux-ico-chat text-white text-2xl"
+            role="img"
+            aria-label="chat"
+          ></span>
+          <div
+            class="absolute h-4 w-4 text-white rounded-full bg-red-600 grid place-content-center text-xs top-[-8px] right-[-2px]"
+          >
+            8
+          </div>
+        </div>
+      </div>
+      <oj-avatar
+        slot="leading"
+        size="xs"
+        src="[[user().profileImage]]"
+      ></oj-avatar>
+    </div>
+  </div>
+  <div class="flex">
+    <div class="flex-[0.25] sticky h-[calc(100vh-200px)] px-2 top-[80px]">
+      <oj-navigation-list
+        selection="{{activeTab}}"
+        display="all"
+        aria-label="Choose a navigation item"
+        drill-mode="none"
+        data="[[navDataProvider]]"
+      >
+        <template slot="itemTemplate" data-oj-as="item">
+          <li :class="[[{'oj-disabled' : item.data.disabled === 'true'}]]">
+            <a href="#">
+              <span
+                :class="[['oj-navigationlist-item-icon ' + item.data.icons]]"
+              ></span>
+              <oj-bind-text value="[[item.data.name]]"></oj-bind-text>
+            </a>
+          </li>
+        </template>
+      </oj-navigation-list>
+    </div>
+    <div class="flex-[0.50]">
+      <oj-bind-if test="[[activeTab()==='home']]">
+        <div data-bind="ojModule:{name:'socialHome',params:{activeTab}}"></div>
+      </oj-bind-if>
+      <oj-bind-if test="[[activeTab()==='create']]">
+        <div data-bind="ojModule:{name:'createPost',params:{activeTab}}"></div>
+      </oj-bind-if>
+      <oj-bind-if test="[[activeTab()==='upvoted']]">
+        <div data-bind="ojModule:{name:'upvotedPost',params:{activeTab}}"></div>
+      </oj-bind-if>
+    </div>
+    <div class="flex-[0.25]">Right Bar</div>
+  </div>
+</div>

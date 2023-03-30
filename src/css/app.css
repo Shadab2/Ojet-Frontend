@@ -73,6 +73,16 @@ html[dir="rtl"] .demo-oracle-icon {
   position: relative;
 }
 
+.bg-gradient-red {
+  background-image: linear-gradient(
+    to right top,
+    #c6340d,
+    #d42a26,
+    #e11f3b,
+    #eb1451,
+    #f30e67
+  );
+}
 .bg-wave {
   position: absolute;
   bottom: 0;
@@ -133,4 +143,96 @@ html[dir="rtl"] .demo-oracle-icon {
 .home-prop-img.loaded {
   opacity: 1;
   transform: scale(1);
+}
+
+.max-w-seventy-five {
+  max-width: 75% !important;
+}
+
+.address-card {
+  position: relative;
+  overflow: hidden;
+
+  background-color: teal;
+  border-radius: 10px;
+  width: 250px;
+  isolation: isolate;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+.address-card:hover {
+  background-color: rgb(2, 85, 85);
+}
+.address-card::before {
+  content: "";
+  width: 200px;
+  height: 200px;
+  background-color: white;
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(75%, -10%);
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  opacity: 0.4;
+  z-index: -1;
+}
+.glassoformism {
+  background: rgba(244, 223, 223, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-radius: 10px;
+}
+
+.skeleton {
+  animation: skeleton-loading 1s linear infinite alternate;
+}
+
+.skeleton-header-title {
+  margin: 12px;
+  height: 18px;
+  width: 120px;
+}
+.skeleton-title {
+  margin: 20px 0px;
+  height: 20px;
+  width: 200px;
+}
+.skeleton-text-box {
+  height: 16px;
+  width: 40px;
+  border-radius: 3px;
+}
+
+.skeleton-text {
+  height: 10px;
+  width: 100%;
+  margin: 8px 0px;
+}
+
+.skeleton-text:last-child {
+  width: 70%;
+}
+.skeleton-card-container {
+  height: 180px;
+  width: 100%;
+  margin: 20px 0px;
+}
+
+.skeleton-footer {
+  height: 40px;
+  width: 100%;
+  margin: 20px 0px;
+  margin-bottom: 0px;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-color: hsl(200, 20%, 70%);
+  }
+  100% {
+    background-color: hsl(200, 20%, 95%);
+  }
 }

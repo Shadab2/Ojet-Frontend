@@ -14,9 +14,12 @@ define([
   "../services/userService",
   "ojs/ojarraydataprovider",
   "ojs/ojknockout",
+  "ojs/ojinputtext",
+  "ojs/ojformlayout",
+  "ojs/ojinputsearch",
   "ojs/ojavatar",
 ], function (ko, UserContext, UserService, ArrayDataProvider) {
-  function DashboardViewModel(context) {
+  function SocialViewModel(context) {
     const authenticated = context.routerState.detail.authenticated();
     const router = context.parentRouter;
     if (!authenticated) {
@@ -24,21 +27,54 @@ define([
         this.navigated = true;
       });
     }
+    var self = this;
     const navigationData = [
       { name: "Home", id: "home", icons: "oj-ux-ico-home" },
-      { name: "Users", id: "user", icons: "oj-ux-ico-contact-group" },
-      { name: "Statistics", id: "stats", icons: "oj-ux-ico-chart-bar" },
+      { name: "Create", id: "create", icons: "oj-ux-ico-library-add" },
+      { name: "Upvoted", id: "upvoted", icons: "oj-ux-ico-content-item-list" },
       {
-        name: "Miscellaneous",
-        id: "misc",
-        icons: "oj-ux-ico-application-suite",
+        name: "Message",
+        id: "message",
+        icons: "oj-ux-ico-oracle-chat-outline",
+      },
+      {
+        name: "Groups",
+        id: "groups",
+        icons: "oj-ux-ico-contact-group",
+      },
+      {
+        name: "Videos",
+        id: "videos",
+        icons: "oj-ux-ico-video-create",
+      },
+      {
+        name: "Bookmarks",
+        id: "bookmarsk",
+        icons: "oj-ux-ico-bookmark-selected",
+      },
+      {
+        name: "Events",
+        id: "Events",
+        icons: "oj-ux-ico-event-available",
+      },
+      {
+        name: "Courses",
+        id: "courses",
+        icons: "oj-ux-ico-self-study",
       },
     ];
+
     self.user = UserContext.user;
-    self.activeTab = ko.observable("user");
+    self.activeTab = ko.observable("home");
     self.navDataProvider = new ArrayDataProvider(navigationData, {
       keyAttributes: "id",
     });
+
+    self.searchValue = ko.observable();
+    self.searchRawValue = ko.observable();
+    self.searchTerm = ko.observable();
+
+    self.handleValueAction = function () {};
   }
 
   /*
@@ -46,5 +82,5 @@ define([
    * return a constructor for the ViewModel so that the ViewModel is constructed
    * each time the view is displayed.
    */
-  return DashboardViewModel;
+  return SocialViewModel;
 });

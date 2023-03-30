@@ -1,7 +1,8 @@
 define(["knockout"], function (ko) {
   var self = this;
   self.authToken = ko.observable("");
-
+  self.avatar =
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQA7J_nWmuLQLoOtHyvwRXfkrkVvW621Bx9nQ&usqp=CAU";
   self.user = ko.observable({
     email: "",
     firstName: "",
@@ -9,7 +10,19 @@ define(["knockout"], function (ko) {
     mobileNo: "",
     profileImage: null,
     role: null,
+    addressList: [],
   });
+
+  self.init = function () {
+    const userData = window.localStorage.getItem("training_user");
+    if (userData) {
+      const userDataParsed = JSON.parse(userData);
+      self.user(userDataParsed.user);
+      self.authToken(userDataParsed.authToken);
+    }
+  };
+
+  self.init();
 
   self.authenticated = ko.computed(function () {
     return self.authToken() !== "";
@@ -28,11 +41,22 @@ define(["knockout"], function (ko) {
     if ("profileImage" in profile) {
       updatedProfile.profileImage = profile.profileImage
         ? "data:image/jpeg;base64," + profile.profileImage
-        : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQA7J_nWmuLQLoOtHyvwRXfkrkVvW621Bx9nQ&usqp=CAU";
+        : self.avatar;
     }
     self.user(updatedProfile);
+    self.updateLocalStorage();
   };
 
+  self.updateLocalStorage = function () {
+    console.log("updating");
+    window.localStorage.setItem(
+      "training_user",
+      JSON.stringify({
+        user: self.user(),
+        authToken: self.authToken(),
+      })
+    );
+  };
   self.updateToken = function (authTokenFromBackend) {
     self.authToken(authTokenFromBackend);
   };
