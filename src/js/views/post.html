@@ -19,7 +19,7 @@
     ></span>
   </div>
   <hr />
-  <h6 class="italic text-[#1ea70c]">
+  <h6 class="italic" :class="[[titleClass]]">
     <oj-bind-text value="[[post.title]]"></oj-bind-text>
   </h6>
   <oj-bind-for-each data="[[post.techStacks]]">

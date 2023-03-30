@@ -8,6 +8,7 @@ define([
     var self = this;
     self.activeTab = params.activeTab;
     self.upvotedPosts = ko.observableArray([]);
+    self.loading = ko.observable(true);
 
     self.getUpvotedPosts = async function () {
       try {
@@ -18,7 +19,10 @@ define([
           return PostService.parsePostData(ps, newSet);
         });
         self.upvotedPosts(data);
-      } catch (e) {}
+        self.loading(false);
+      } catch (e) {
+        self.loading(false);
+      }
     };
 
     self.getUpvotedPosts();

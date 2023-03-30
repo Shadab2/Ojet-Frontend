@@ -33,6 +33,9 @@
       </oj-button>
     </div>
   </div>
+  <oj-bind-if test="[[posts().length==0]]">
+    <div data-bind="ojModule:{name:'loadingPost'}"></div>
+  </oj-bind-if>
   <div class="flex flex-col gap-2">
     <oj-bind-for-each data="[[posts]]">
       <template data-oj-as="post">

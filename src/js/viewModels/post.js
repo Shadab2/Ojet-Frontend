@@ -16,7 +16,7 @@ define([
     self.resourceLinks = ko.observableArray(self.post.resourceLinks);
     self.index = ko.observable(0);
     self.commentVal = ko.observable("");
-    self.commentButtonDisable = ko.observable(false);
+    self.commentButtonDisable = ko.observable(!self.post.id);
     self.commentVisible = ko.observable(false);
     self.image = ko.observable(
       self.postimages().length > 0 ? self.postimages()[0] : ""
@@ -38,8 +38,18 @@ define([
       return timeago.format(dateString);
     };
 
-    const hexColors = ["#d30a43", "#8f098f", "#F80102", "#1ea70c"];
+    self.titleClass = ko.computed(function () {
+      const hexColorsStyles = [
+        "text-[#d30a43]",
+        "text-[#8f098f]",
+        "text-[#F80102]",
+        "text-[#1ea70c]",
+      ];
 
+      return hexColorsStyles[
+        Math.floor(Math.random() * hexColorsStyles.length)
+      ];
+    });
     self.handleImageChange = function () {
       if (self.image() === "") return;
       const len = self.postimages().length;

@@ -185,3 +185,54 @@ html[dir="rtl"] .demo-oracle-icon {
   -webkit-backdrop-filter: blur(4px);
   border-radius: 10px;
 }
+
+.skeleton {
+  animation: skeleton-loading 1s linear infinite alternate;
+}
+
+.skeleton-header-title {
+  margin: 12px;
+  height: 18px;
+  width: 120px;
+}
+.skeleton-title {
+  margin: 20px 0px;
+  height: 20px;
+  width: 200px;
+}
+.skeleton-text-box {
+  height: 16px;
+  width: 40px;
+  border-radius: 3px;
+}
+
+.skeleton-text {
+  height: 10px;
+  width: 100%;
+  margin: 8px 0px;
+}
+
+.skeleton-text:last-child {
+  width: 70%;
+}
+.skeleton-card-container {
+  height: 180px;
+  width: 100%;
+  margin: 20px 0px;
+}
+
+.skeleton-footer {
+  height: 40px;
+  width: 100%;
+  margin: 20px 0px;
+  margin-bottom: 0px;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-color: hsl(200, 20%, 70%);
+  }
+  100% {
+    background-color: hsl(200, 20%, 95%);
+  }
+}
