@@ -1,0 +1,13 @@
+<div class="w-[80%] mx-auto p-3 bg-white shadow-lg rounded-md"">
+     <oj-bind-for-each data="[[imageDataProvider]]">
+            <template data-oj-as="img">
+                    <div class="w-full my-2 rounded-md shadow-md">
+                      <img :src="[[img.data.image]]" class="w-full object-cover rounded-md" alt="post image"/>
+                    </div>
+             </template>
+             <template slot="noData">
+                 <div class="skeleton skeleton-card-container"></div>
+                 <div class="skeleton skeleton-card-container"></div>
+             </template>
+    </oj-bind-for-each>
+</div>

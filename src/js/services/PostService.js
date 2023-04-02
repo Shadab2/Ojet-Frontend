@@ -6,6 +6,7 @@ define(["../context/userContext", "axios"], function (UserContext, axios) {
 
     parsePostData(ps, likedPostsIds = new Set()) {
       return {
+        id: ps.id,
         post: {
           id: ps.id,
           title: ps.title,
@@ -53,6 +54,19 @@ define(["../context/userContext", "axios"], function (UserContext, axios) {
       });
     }
 
+    fetchOwnerPost() {
+      const authToken = UserContext.authToken();
+      return axios.get(this.baseUrl, {
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+    }
+
+    fetchTrendingPosts() {
+      const authToken = UserContext.authToken();
+      return axios.get(this.baseUrl + "/trending", {
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+    }
     fetchAllPublicPosts() {
       const authToken = UserContext.authToken();
       return axios.get(this.baseUrl + "/all", {
@@ -85,6 +99,20 @@ define(["../context/userContext", "axios"], function (UserContext, axios) {
           headers: { Authorization: `Bearer ${authToken}` },
         }
       );
+    }
+
+    searchPosts(searchFilter) {
+      const authToken = UserContext.authToken();
+      return axios.post(this.baseUrl + "/search", searchFilter, {
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+    }
+
+    fetchImages() {
+      const authToken = UserContext.authToken();
+      return axios.get(this.baseUrl + "/all/images", {
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
     }
   }
   return new PostService();

@@ -236,3 +236,7 @@ html[dir="rtl"] .demo-oracle-icon {
     background-color: hsl(200, 20%, 95%);
   }
 }
+
+.rightbarScroll::-webkit-scrollbar {
+  display: none;
+}

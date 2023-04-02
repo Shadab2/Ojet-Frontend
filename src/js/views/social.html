@@ -86,10 +86,106 @@
       <oj-bind-if test="[[activeTab()==='create']]">
         <div data-bind="ojModule:{name:'createPost',params:{activeTab}}"></div>
       </oj-bind-if>
-      <oj-bind-if test="[[activeTab()==='upvoted']]">
-        <div data-bind="ojModule:{name:'upvotedPost',params:{activeTab}}"></div>
+      <oj-bind-if test="[[postListMatch]]">
+        <div
+          data-bind="ojModule:{name:'postList',params:config[activeTab()]}"
+        ></div>
+      </oj-bind-if>
+      <oj-bind-if test="[[activeTab()=='search']]">
+        <div class="p-2">
+          <div class="my-2 w-[50%] mx-auto">
+            <oj-select-single
+              id="selectSearchOptions"
+              data="[[searchOptionsProvider]]"
+              value="{{searchOptions}}"
+              label-hint="Search by"
+              on-value-changed="[[getSearchResults]]"
+            ></oj-select-single>
+          </div>
+          <oj-bind-if test="[[searchLoading]]">
+            <div data-bind="ojModule:{name:'loadingPost'}"></div>
+          </oj-bind-if>
+          <div class="flex flex-col gap-2">
+            <oj-bind-for-each data="[[searchRes]]">
+              <template data-oj-as="post">
+                <div
+                  data-bind="ojModule:{name:'Post',params:{post:post.data.post  ,user:post.data.user}}"
+                ></div>
+              </template>
+              <template slot="noData">
+                <div class="my-2 text-center">
+                  <oj-bind-text
+                    value="We did not find any post for your search"
+                  ></oj-bind-text>
+                </div>
+              </template>
+            </oj-bind-for-each>
+          </div>
+        </div>
+      </oj-bind-if>
+      <oj-bind-if test="[[activeTab()=='gallery']]">
+        <div data-bind="ojModule:{name:'gallery'}"></div>
       </oj-bind-if>
     </div>
-    <div class="flex-[0.25]">Right Bar</div>
+    <div
+      class="flex-[0.25] p-2 translate-x-[-30px] sticky min-h-[100vh] max-h-[120vh] rightbarScroll overflow-y-scroll px-2 top-[80px]"
+    >
+      <p>
+        <span class="oj-ux-ico-artifacts text-teal-600 text-xl mr-2"></span>
+        <span class="font-bold text-[#4264b2]">Robert Downey </span>
+        and <span class="font-bold">3 others</span> have posted recently.
+      </p>
+      <div class="my-2">
+        <img src="./assets/ad.png" class="w-full object-cover rounded-md" />
+      </div>
+      <h6 class="text-teal-600 flex items-center gap-2">
+        <span class="oj-ux-ico-trending-up text-[30px] text-red-600"></span>
+        <span>Trending Posts</span>
+      </h6>
+      <oj-list-view
+        id="listview"
+        aria-label="simple list"
+        data="[[trendinPostDataProvider]]"
+        class="oj-listview-item-padding-off"
+      >
+        <template slot="itemTemplate" data-oj-as="item">
+          <oj-list-item-layout
+            class="cursor-pointer"
+            data-bind="click:()=>activeTab('trending')"
+          >
+            <span class="oj-typography-body-md oj-text-color-primary">
+              <oj-bind-text value="[[item.data.post.title]]"></oj-bind-text>
+            </span>
+            <oj-avatar
+              slot="leading"
+              size="xs"
+              src="[[item.data.user.profileImage]]"
+            ></oj-avatar>
+            <span
+              slot="secondary"
+              class="oj-typography-body-sm oj-text-color-secondary"
+            >
+              <oj-bind-text value="[[item.data.user.firstName]]"></oj-bind-text>
+            </span>
+          </oj-list-item-layout>
+        </template>
+        <template slot="noData">
+          <div>
+            <div class="flex items-center gap-2">
+              <div
+                class="skeleton skeleton-image h-8 w-8 rounded-full object-cover"
+              ></div>
+              <div class="skeleton skeleton-header-title"></div>
+            </div>
+            <div class="flex items-center gap-2">
+              <div
+                class="skeleton skeleton-image h-8 w-8 rounded-full object-cover"
+              ></div>
+              <div class="skeleton skeleton-header-title"></div>
+            </div>
+          </div>
+        </template>
+      </oj-list-view>
+    </div>
   </div>
 </div>

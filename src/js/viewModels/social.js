@@ -12,13 +12,27 @@ define([
   "knockout",
   "../context/userContext",
   "../services/userService",
+  "../services/toastService",
+  "../services/postService",
   "ojs/ojarraydataprovider",
+  "ojs/ojswitch",
   "ojs/ojknockout",
   "ojs/ojinputtext",
   "ojs/ojformlayout",
+  "ojs/ojselectsingle",
   "ojs/ojinputsearch",
+  "ojs/ojlistview",
+  "ojs/ojlistitemlayout",
+  "ojs/ojknockout",
   "ojs/ojavatar",
-], function (ko, UserContext, UserService, ArrayDataProvider) {
+], function (
+  ko,
+  UserContext,
+  UserService,
+  ToastService,
+  PostService,
+  ArrayDataProvider
+) {
   function SocialViewModel(context) {
     const authenticated = context.routerState.detail.authenticated();
     const router = context.parentRouter;
@@ -31,26 +45,37 @@ define([
     const navigationData = [
       { name: "Home", id: "home", icons: "oj-ux-ico-home" },
       { name: "Create", id: "create", icons: "oj-ux-ico-library-add" },
-      { name: "Upvoted", id: "upvoted", icons: "oj-ux-ico-content-item-list" },
+      { name: "Upvoted", id: "upvoted", icons: "oj-ux-ico-thumbs-up" },
+      { name: "Search", id: "search", icons: "oj-ux-ico-search-list" },
+      {
+        name: "Your Posts",
+        id: "yourPost",
+        icons: "oj-ux-ico-user-available",
+      },
+      {
+        name: "Saved",
+        id: "saved",
+        icons: "oj-ux-ico-bookmark",
+      },
+      {
+        name: "Trending",
+        id: "trending",
+        icons: "oj-ux-ico-trending-up",
+      },
       {
         name: "Message",
         id: "message",
         icons: "oj-ux-ico-oracle-chat-outline",
       },
       {
+        name: "Gallery",
+        id: "gallery",
+        icons: "oj-ux-ico-library-image",
+      },
+      {
         name: "Groups",
         id: "groups",
         icons: "oj-ux-ico-contact-group",
-      },
-      {
-        name: "Videos",
-        id: "videos",
-        icons: "oj-ux-ico-video-create",
-      },
-      {
-        name: "Bookmarks",
-        id: "bookmarsk",
-        icons: "oj-ux-ico-bookmark-selected",
       },
       {
         name: "Events",
@@ -69,12 +94,154 @@ define([
     self.navDataProvider = new ArrayDataProvider(navigationData, {
       keyAttributes: "id",
     });
+    self.messages = ko.observableArray(null);
+    self.postListMatch = ko.computed(function () {
+      const activeTab = self.activeTab();
+      const postListValues = new Set([
+        "upvoted",
+        "yourPost",
+        "saved",
+        "trending",
+      ]);
+      return postListValues.has(activeTab);
+    });
 
-    self.searchValue = ko.observable();
+    self.trendingPosts = ko.observableArray([]);
+    self.trendinPostDataProvider = new ArrayDataProvider(self.trendingPosts, {
+      keyAttributes: "id",
+    });
+
+    self.fetchTrendingPosts = async function () {
+      try {
+        const res = await PostService.fetchTrendingPosts();
+        const newSet = new Set();
+        res.data.forEach((ps) => newSet.add(ps.id));
+        let data = res.data.map((ps) => {
+          return PostService.parsePostData(ps, newSet);
+        });
+        self.trendingPosts(data);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    self.fetchTrendingPosts();
+
+    // navigationConfig
+    self.config = {
+      upvoted: {
+        activeTab: self.activeTab,
+        headerValue: "All Liked Posts in one place",
+        listEmptyValue: "You dont have any upvoted post",
+        fetchFunction: async function (cb) {
+          try {
+            const res = await PostService.fetchAllUpvotedPosts();
+            const newSet = new Set();
+            res.data.forEach((ps) => newSet.add(ps.id));
+            let data = res.data.map((ps) => {
+              return PostService.parsePostData(ps, newSet);
+            });
+            cb(data, false);
+          } catch (e) {
+            console.log(e);
+            cb([], false);
+          }
+        },
+      },
+      yourPost: {
+        activeTab: self.activeTab,
+        headerValue: "All Your Posts in one place",
+        listEmptyValue: "Oops! you didn't posted lately",
+        fetchFunction: async function (cb) {
+          try {
+            const res = await PostService.fetchOwnerPost();
+            const upvotedPosts = await PostService.fetchAllUpvotedPosts();
+            const newSet = new Set();
+            upvotedPosts.data.forEach((ps) => newSet.add(ps.id));
+            let data = res.data.map((ps) => {
+              return PostService.parsePostData(ps, newSet);
+            });
+            cb(data, false);
+          } catch (e) {
+            cb([], false);
+          }
+        },
+      },
+      trending: {
+        activeTab: self.activeTab,
+        headerValue: "Top 5 trends of the  week",
+        listEmptyValue: "We are still fetching , hang on",
+        fetchFunction: async function (cb) {
+          try {
+            const res = await PostService.fetchTrendingPosts();
+            const newSet = new Set();
+            const upvotedPosts = await PostService.fetchAllUpvotedPosts();
+            upvotedPosts.data.forEach((ps) => newSet.add(ps.id));
+            let data = res.data.map((ps) => {
+              return PostService.parsePostData(ps, newSet);
+            });
+            cb(data, false);
+          } catch (e) {
+            cb([], false);
+          }
+        },
+      },
+    };
+
+    self.searchValue = ko.observable("");
     self.searchRawValue = ko.observable();
-    self.searchTerm = ko.observable();
+    self.searchOptionsProvider = new ArrayDataProvider(
+      [
+        { label: "Tech Stack", value: "tech" },
+        { label: "Title", value: "title" },
+        { label: "Tech Stack or Title", value: "or" },
+      ],
+      {
+        keyAttributes: "value",
+      }
+    );
 
-    self.handleValueAction = function () {};
+    self.searchOptions = ko.observable("tech");
+    self.searchLoading = ko.observable(false);
+    self.searchRes = ko.observableArray([]);
+
+    self.getSearchResults = async function () {
+      const searchOptionsObj = {};
+      const selectOption = self.searchOptions();
+      const searchTerm = self.searchValue();
+      if (!searchTerm || searchTerm.length <= 3) {
+        self.messages([
+          ToastService.error("Type at least 4 characters to search"),
+        ]);
+        return;
+      }
+      if (selectOption == "or") {
+        searchOptionsObj["tech"] = searchOptionsObj["title"] = searchTerm;
+      } else if (selectOption == "tech") {
+        searchOptionsObj["tech"] = searchTerm;
+      } else searchOptionsObj["title"] = searchTerm;
+      self.searchLoading(true);
+      try {
+        const res = await PostService.searchPosts(searchOptionsObj);
+        const upvotedPosts = await PostService.fetchAllUpvotedPosts();
+        const newSet = new Set();
+        upvotedPosts.data.forEach((ps) => newSet.add(ps.id));
+        let data = res.data.map((ps) => {
+          return PostService.parsePostData(ps, newSet);
+        });
+        self.searchRes(data);
+        self.searchLoading(false);
+      } catch (e) {
+        self.searchLoading(false);
+        console.log(e);
+      }
+    };
+
+    self.handleValueAction = function (e) {
+      self.searchValue(e.detail.value);
+      if (self.activeTab() !== "search") self.activeTab("search");
+      self.getSearchResults();
+    };
   }
 
   /*

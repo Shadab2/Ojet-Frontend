@@ -2,11 +2,12 @@ define([
   "knockout",
   "timeago",
   "../services/postService",
+  "../context/userContext",
   "ojs/ojknockout",
   "ojs/ojaccordion",
   "ojs/ojdialog",
   "ojs/ojinputtext",
-], function (ko, timeago, PostService) {
+], function (ko, timeago, PostService, UserContext) {
   function PostViewModel(params) {
     var self = this;
     self.user = params.user;
@@ -78,11 +79,11 @@ define([
     };
 
     self.modalOpen = function () {
-      document.getElementById("modalDialog1").open();
+      document.getElementById("modalDialog1" + " " + self.post.id).open();
     };
 
     self.closeModal = function () {
-      document.getElementById("modalDialog1").close();
+      document.getElementById("modalDialog1" + " " + self.post.id).close();
     };
 
     self.submitComment = async function () {
@@ -93,10 +94,29 @@ define([
           self.post.id,
           self.commentVal()
         );
+        const feedback = self.postFeedback();
+        const newFeedback = {
+          ...feedback,
+          commentsCount: self.postFeedback().commentsCount + 1,
+          commentsList: [
+            ...feedback.commentsList,
+            {
+              userName:
+                UserContext.user().firstName +
+                " " +
+                UserContext.user().lastName,
+              userProfileImage: UserContext.user().profileImage.substring(23),
+              message: self.commentVal(),
+            },
+          ],
+        };
+        self.postFeedback(newFeedback);
         self.commentVal("");
         self.commentButtonDisable(false);
         self.closeModal();
-      } catch (e) {}
+      } catch (e) {
+        console.log(e);
+      }
     };
   }
   return PostViewModel;
