@@ -19,6 +19,7 @@ define([
     self.commentVal = ko.observable("");
     self.commentButtonDisable = ko.observable(!self.post.id);
     self.commentVisible = ko.observable(false);
+    self.saved = ko.observable(self.post.saved);
     self.image = ko.observable(
       self.postimages().length > 0 ? self.postimages()[0] : ""
     );
@@ -69,6 +70,16 @@ define([
           commentsCount: self.postFeedback().commentsCount,
           commentsList: self.postFeedback().commentsList,
         });
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    self.handleSave = async function () {
+      if (!self.post.id) return;
+      try {
+        const res = await PostService.savePostForUser(self.post.id);
+        self.saved(!self.saved());
       } catch (e) {
         console.log(e);
       }

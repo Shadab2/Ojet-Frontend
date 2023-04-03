@@ -126,6 +126,9 @@
       <oj-bind-if test="[[activeTab()=='gallery']]">
         <div data-bind="ojModule:{name:'gallery'}"></div>
       </oj-bind-if>
+      <oj-bind-if test="[[activeTab()=='message']]">
+        <div data-bind="ojModule:{name:'community'}"></div>
+      </oj-bind-if>
     </div>
     <div
       class="flex-[0.25] p-2 translate-x-[-30px] sticky min-h-[100vh] max-h-[120vh] rightbarScroll overflow-y-scroll px-2 top-[80px]"

@@ -13,10 +13,19 @@
         ><oj-bind-text value="[[date]]"></oj-bind-text
       ></span>
     </div>
-    <span
-      class="oj-ux-ico-three-boxes-vertical text-[#4264b2]"
-      role="img"
-    ></span>
+    <oj-bind-if test="[[saved]]">
+      <span
+        class="oj-ux-ico-check-square cursor-pointer text-lg text-[#4264b2]"
+        data-bind="click:handleSave"
+      ></span>
+    </oj-bind-if>
+    <oj-bind-if test="[[!saved()]]">
+      <span
+        class="oj-ux-ico-library-add cursor-pointer text-lg text-[#4264b2]"
+        data-bind="click:handleSave"
+        role="img"
+      ></span>
+    </oj-bind-if>
   </div>
   <hr />
   <h6 class="italic" :class="[[titleClass]]">

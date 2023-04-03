@@ -1,0 +1,21 @@
+<div class="p-2 w-[90%] mx-auto h-[110vh] bg-slate-200">
+  <div class="h-[90%] w-full"></div>
+  <div class="h-[5%] w-full oj-flex">
+    <div class="oj-sm-10">
+      <oj-input-text
+        id="text-input-last"
+        value="{{sendMsgValue}}"
+        label-edge="inside"
+        class="oj-form-control-width-lg"
+      ></oj-input-text>
+    </div>
+
+    <button
+      class="flex items-center gap-2 rounded-md bg-teal-600 text-white px-2 ml-2"
+      on-click="[[sendMessage]]"
+    >
+      <span>Send</span>
+      <span class="oj-ux-ico-send" role="img"></span>
+    </button>
+  </div>
+</div>

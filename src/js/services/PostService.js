@@ -4,7 +4,9 @@ define(["../context/userContext", "axios"], function (UserContext, axios) {
       this.baseUrl = "http://localhost:8080/api/post";
     }
 
-    parsePostData(ps, likedPostsIds = new Set()) {
+    parsePostData(ps, likedPostsIds = [], savedPostIds = []) {
+      const likedSet = new Set([...likedPostsIds]);
+      const savedSet = new Set([...savedPostIds]);
       return {
         id: ps.id,
         post: {
@@ -18,7 +20,8 @@ define(["../context/userContext", "axios"], function (UserContext, axios) {
           resourceLinks: ps.resourceLinks,
           dateModified: ps.dateModified,
           postFeedBack: ps.postFeedBack,
-          upvoted: likedPostsIds.has(ps.id),
+          upvoted: likedSet.has(ps.id),
+          saved: savedSet.has(ps.id),
         },
         user: {
           firstName: ps.user.firstName,
@@ -101,6 +104,17 @@ define(["../context/userContext", "axios"], function (UserContext, axios) {
       );
     }
 
+    savePostForUser(postId) {
+      const authToken = UserContext.authToken();
+      return axios.post(
+        this.baseUrl + "/" + postId + "/save",
+        {},
+        {
+          headers: { Authorization: `Bearer ${authToken}` },
+        }
+      );
+    }
+
     searchPosts(searchFilter) {
       const authToken = UserContext.authToken();
       return axios.post(this.baseUrl + "/search", searchFilter, {
@@ -111,6 +125,20 @@ define(["../context/userContext", "axios"], function (UserContext, axios) {
     fetchImages() {
       const authToken = UserContext.authToken();
       return axios.get(this.baseUrl + "/all/images", {
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+    }
+
+    fetchUserSavedPost() {
+      const authToken = UserContext.authToken();
+      return axios.get(this.baseUrl + "/all/saved", {
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+    }
+
+    fetchUserMappings() {
+      const authToken = UserContext.authToken();
+      return axios.get(this.baseUrl + "/user-mappings", {
         headers: { Authorization: `Bearer ${authToken}` },
       });
     }

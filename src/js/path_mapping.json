@@ -70,6 +70,34 @@
         "cdnPath": "timeago/timeago"
       }
     },
+    "sockjs": {
+      "cdn": "sockjs-client",
+      "cwd": "node_modules/sockjs-client/dist",
+      "debug": {
+        "src": "sockjs.min.js",
+        "path": "libs/sockjs/sockjs.min.js",
+        "cdnPath": "sockjs/sockjs"
+      },
+      "release": {
+        "src": "sockjs.min.js",
+        "path": "libs/sockjs/sockjs.min.js",
+        "cdnPath": "sockjs/sockjs"
+      }
+    },
+    "webstomp": {
+      "cdn": "webstomp-client",
+      "cwd": "node_modules/webstomp-client/dist",
+      "debug": {
+        "src": "webstomp.min.js",
+        "path": "libs/webstomp/webstomp.min.js",
+        "cdnPath": "webstomp/webstomp"
+      },
+      "release": {
+        "src": "webstomp.min.js",
+        "path": "libs/webstomp/webstomp.min.js",
+        "cdnPath": "webstomp/webstomp"
+      }
+    },
 
     "jqueryui-amd": {
       "cdn": "3rdparty",

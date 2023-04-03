@@ -42,6 +42,10 @@ define([
       });
     }
     var self = this;
+    this.connected = () => {};
+
+    this.disconnected = () => {};
+
     const navigationData = [
       { name: "Home", id: "home", icons: "oj-ux-ico-home" },
       { name: "Create", id: "create", icons: "oj-ux-ico-library-add" },
@@ -94,6 +98,7 @@ define([
     self.navDataProvider = new ArrayDataProvider(navigationData, {
       keyAttributes: "id",
     });
+    self.userMappings = ko.observable({ liked: [], saved: [] });
     self.messages = ko.observableArray(null);
     self.postListMatch = ko.computed(function () {
       const activeTab = self.activeTab();
@@ -105,19 +110,33 @@ define([
       ]);
       return postListValues.has(activeTab);
     });
-
     self.trendingPosts = ko.observableArray([]);
     self.trendinPostDataProvider = new ArrayDataProvider(self.trendingPosts, {
       keyAttributes: "id",
     });
 
+    self.getUserMappings = async function () {
+      try {
+        const res = await PostService.fetchUserMappings();
+        self.userMappings({
+          liked: res.data.liked,
+          saved: res.data.saved,
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
     self.fetchTrendingPosts = async function () {
       try {
         const res = await PostService.fetchTrendingPosts();
-        const newSet = new Set();
-        res.data.forEach((ps) => newSet.add(ps.id));
+        await self.getUserMappings();
         let data = res.data.map((ps) => {
-          return PostService.parsePostData(ps, newSet);
+          return PostService.parsePostData(
+            ps,
+            self.userMappings().liked,
+            self.userMappings().saved
+          );
         });
         self.trendingPosts(data);
       } catch (e) {
@@ -136,10 +155,13 @@ define([
         fetchFunction: async function (cb) {
           try {
             const res = await PostService.fetchAllUpvotedPosts();
-            const newSet = new Set();
-            res.data.forEach((ps) => newSet.add(ps.id));
+            await self.getUserMappings();
             let data = res.data.map((ps) => {
-              return PostService.parsePostData(ps, newSet);
+              return PostService.parsePostData(
+                ps,
+                self.userMappings().liked,
+                self.userMappings().saved
+              );
             });
             cb(data, false);
           } catch (e) {
@@ -155,11 +177,13 @@ define([
         fetchFunction: async function (cb) {
           try {
             const res = await PostService.fetchOwnerPost();
-            const upvotedPosts = await PostService.fetchAllUpvotedPosts();
-            const newSet = new Set();
-            upvotedPosts.data.forEach((ps) => newSet.add(ps.id));
+            await self.getUserMappings();
             let data = res.data.map((ps) => {
-              return PostService.parsePostData(ps, newSet);
+              return PostService.parsePostData(
+                ps,
+                self.userMappings().liked,
+                self.userMappings().saved
+              );
             });
             cb(data, false);
           } catch (e) {
@@ -174,11 +198,34 @@ define([
         fetchFunction: async function (cb) {
           try {
             const res = await PostService.fetchTrendingPosts();
-            const newSet = new Set();
-            const upvotedPosts = await PostService.fetchAllUpvotedPosts();
-            upvotedPosts.data.forEach((ps) => newSet.add(ps.id));
+            await self.getUserMappings();
             let data = res.data.map((ps) => {
-              return PostService.parsePostData(ps, newSet);
+              return PostService.parsePostData(
+                ps,
+                self.userMappings().liked,
+                self.userMappings().saved
+              );
+            });
+            cb(data, false);
+          } catch (e) {
+            cb([], false);
+          }
+        },
+      },
+      saved: {
+        activeTab: self.activeTab,
+        headerValue: "Your Saved posts in one place",
+        listEmptyValue: "You don't have any saved posts!",
+        fetchFunction: async function (cb) {
+          try {
+            const res = await PostService.fetchUserSavedPost();
+            await self.getUserMappings();
+            let data = res.data.map((ps) => {
+              return PostService.parsePostData(
+                ps,
+                self.userMappings().liked,
+                self.userMappings().saved
+              );
             });
             cb(data, false);
           } catch (e) {
@@ -224,10 +271,13 @@ define([
       try {
         const res = await PostService.searchPosts(searchOptionsObj);
         const upvotedPosts = await PostService.fetchAllUpvotedPosts();
-        const newSet = new Set();
-        upvotedPosts.data.forEach((ps) => newSet.add(ps.id));
+        await self.getUserMappings();
         let data = res.data.map((ps) => {
-          return PostService.parsePostData(ps, newSet);
+          return PostService.parsePostData(
+            ps,
+            self.userMappings().liked,
+            self.userMappings().saved
+          );
         });
         self.searchRes(data);
         self.searchLoading(false);
