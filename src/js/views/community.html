@@ -1,6 +1,37 @@
-<div class="p-2 w-[90%] mx-auto h-[110vh] bg-slate-200">
-  <div class="h-[90%] w-full"></div>
-  <div class="h-[5%] w-full oj-flex">
+<div class="p-2 w-[90%] mx-auto h-[110vh] shadow-md">
+  <div
+    class="h-[100vh] p-2 w-full overflow-y-scroll rightbarScroll"
+    id="messageBody"
+  >
+    <oj-bind-for-each data="[[messageList]]">
+      <template>
+        <div
+          class="m-2 flex gap-2 items-center"
+          :class="[[{'ml-auto':senderEmail===$current.data.senderEmail}]]"
+          style="width: max-content"
+          id="message"
+        >
+          <oj-avatar
+            slot="leading"
+            size="xxs"
+            src="[[$current.data.profileImage]]"
+          ></oj-avatar>
+          <div class="flex gap-1 flex-col text-white">
+            <span
+              class="text-xs p-2 rounded-lg shadow-md bg-[#1ea70c]"
+              :class="[[{'bg-[#8f098f]':senderEmail===$current.data.senderEmail}]]"
+            >
+              <oj-bind-text value="[[$current.data.content]]"></oj-bind-text>
+            </span>
+            <span class="text-xs italic text-black">
+              <oj-bind-text value="[[$current.data.timeStamp]]"></oj-bind-text>
+            </span>
+          </div>
+        </div>
+      </template>
+    </oj-bind-for-each>
+  </div>
+  <div class="h-[50px] w-full oj-flex">
     <div class="oj-sm-10">
       <oj-input-text
         id="text-input-last"
@@ -13,6 +44,7 @@
     <button
       class="flex items-center gap-2 rounded-md bg-teal-600 text-white px-2 ml-2"
       on-click="[[sendMessage]]"
+      style="height: 44px"
     >
       <span>Send</span>
       <span class="oj-ux-ico-send" role="img"></span>

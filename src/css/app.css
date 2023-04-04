@@ -240,3 +240,7 @@ html[dir="rtl"] .demo-oracle-icon {
 .rightbarScroll::-webkit-scrollbar {
   display: none;
 }
+
+#messageBody {
+  scroll-behavior: smooth;
+}

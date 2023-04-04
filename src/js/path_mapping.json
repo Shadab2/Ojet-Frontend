@@ -84,18 +84,18 @@
         "cdnPath": "sockjs/sockjs"
       }
     },
-    "webstomp": {
-      "cdn": "webstomp-client",
-      "cwd": "node_modules/webstomp-client/dist",
+    "stompjs": {
+      "cdn": "stompjs",
+      "cwd": "node_modules/stompjs/lib",
       "debug": {
-        "src": "webstomp.min.js",
-        "path": "libs/webstomp/webstomp.min.js",
-        "cdnPath": "webstomp/webstomp"
+        "src": "stomp.min.js",
+        "path": "libs/stomp/stomp.min.js",
+        "cdnPath": "stomp/stomp"
       },
       "release": {
-        "src": "webstomp.min.js",
-        "path": "libs/webstomp/webstomp.min.js",
-        "cdnPath": "webstomp/webstomp"
+        "src": "stomp.min.js",
+        "path": "libs/stomp/stomp.min.js",
+        "cdnPath": "stomp/stomp"
       }
     },
 

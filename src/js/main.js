@@ -50,7 +50,7 @@
         touchr: "libs/touchr/touchr",
         chai: "libs/chai/chai-4.3.7",
         timeago: "libs/timeago/timeago",
-        webstomp: "libs/webstomp/webstomp",
+        stompjs: "libs/stomp/stomp",
         sockjs: "libs/sockjs/sockjs",
       },
     // endinjector
