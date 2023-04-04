@@ -80,19 +80,16 @@
       </oj-navigation-list>
     </div>
     <div class="flex-[0.50]">
-      <oj-bind-if test="[[activeTab()==='home']]">
-        <div data-bind="ojModule:{name:'socialHome',params:{activeTab}}"></div>
-      </oj-bind-if>
-      <oj-bind-if test="[[activeTab()==='create']]">
-        <div data-bind="ojModule:{name:'createPost',params:{activeTab}}"></div>
-      </oj-bind-if>
-      <oj-bind-if test="[[postListMatch]]">
+      <oj-switcher value="[[activeTab()]]">
         <div
-          data-bind="ojModule:{name:'postList',params:config[activeTab()]}"
+          slot="home"
+          data-bind="ojModule:{name:'socialHome',params:{activeTab}}"
         ></div>
-      </oj-bind-if>
-      <oj-bind-if test="[[activeTab()=='search']]">
-        <div class="p-2">
+        <div
+          slot="create"
+          data-bind="ojModule:{name:'createPost',params:{activeTab}}"
+        ></div>
+        <div slot="search" class="p-2">
           <div class="my-2 w-[50%] mx-auto">
             <oj-select-single
               id="selectSearchOptions"
@@ -122,12 +119,13 @@
             </oj-bind-for-each>
           </div>
         </div>
-      </oj-bind-if>
-      <oj-bind-if test="[[activeTab()=='gallery']]">
-        <div data-bind="ojModule:{name:'gallery'}"></div>
-      </oj-bind-if>
-      <oj-bind-if test="[[activeTab()=='message']]">
-        <div data-bind="ojModule:{name:'community'}"></div>
+        <div slot="gallery" data-bind="ojModule:{name:'gallery'}"></div>
+        <div slot="message" data-bind="ojModule:{name:'community'}"></div>
+      </oj-switcher>
+      <oj-bind-if test="[[postListMatch]]">
+        <div
+          data-bind="ojModule:{name:'postList',params:config[activeTab()]}"
+        ></div>
       </oj-bind-if>
     </div>
     <div

@@ -15,6 +15,7 @@ define([
   "../services/toastService",
   "../services/postService",
   "ojs/ojarraydataprovider",
+  "ojs/ojswitcher",
   "ojs/ojswitch",
   "ojs/ojknockout",
   "ojs/ojinputtext",
