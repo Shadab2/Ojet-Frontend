@@ -1,4 +1,8 @@
-define(["../context/userContext", "axios"], function (UserContext, axios) {
+define(["../context/userContext", "axios", "jquery"], function (
+  UserContext,
+  axios,
+  $
+) {
   class PostService {
     constructor() {
       this.baseUrl = "http://localhost:8080/api/post";
@@ -140,6 +144,23 @@ define(["../context/userContext", "axios"], function (UserContext, axios) {
       const authToken = UserContext.authToken();
       return axios.get(this.baseUrl + "/user-mappings", {
         headers: { Authorization: `Bearer ${authToken}` },
+      });
+    }
+
+    fetchPreviousMsg(offset, callback) {
+      const authToken = UserContext.authToken();
+      $.ajax({
+        method: "GET",
+        url: `http://localhost:8080/api/message?page=${offset}`,
+        headers: {
+          Authorization: "Bearer " + authToken,
+        },
+        success: function (data) {
+          callback(null, data);
+        },
+        error: function (xhr, status, error) {
+          callback(error);
+        },
       });
     }
   }

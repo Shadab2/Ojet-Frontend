@@ -48,7 +48,6 @@ define(["knockout"], function (ko) {
   };
 
   self.updateLocalStorage = function () {
-    console.log("updating");
     window.localStorage.setItem(
       "training_user",
       JSON.stringify({
@@ -56,6 +55,10 @@ define(["knockout"], function (ko) {
         authToken: self.authToken(),
       })
     );
+  };
+
+  self.clearlocalStorage = function () {
+    window.localStorage.removeItem("traning_user");
   };
   self.updateToken = function (authTokenFromBackend) {
     self.authToken(authTokenFromBackend);

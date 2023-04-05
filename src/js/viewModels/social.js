@@ -68,7 +68,7 @@ define([
         icons: "oj-ux-ico-trending-up",
       },
       {
-        name: "Message",
+        name: "Community",
         id: "message",
         icons: "oj-ux-ico-oracle-chat-outline",
       },

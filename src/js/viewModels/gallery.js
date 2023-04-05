@@ -29,7 +29,6 @@ define([
               self.classList[Math.floor(Math.random() * self.classList.length)],
           }))
         );
-        console.log(self.imageList());
       } catch (e) {
         console.log(e);
       }

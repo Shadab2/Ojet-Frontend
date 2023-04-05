@@ -37,6 +37,7 @@ define(["../context/userContext", "axios"], function (UserContext, axios) {
         "",
         true
       );
+      UserContext.clearlocalStorage();
     }
 
     updateProfile(profile) {
