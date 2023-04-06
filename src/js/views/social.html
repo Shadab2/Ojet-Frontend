@@ -16,14 +16,69 @@
       <div class="flex items-center gap-3 mr-8">
         <div class="relative">
           <span
-            class="oj-ux-ico-notification text-white text-2xl"
+            class="oj-ux-ico-notification text-white text-2xl cursor-pointer"
             role="img"
             aria-label="notification"
+            data-bind="click:modalOpen"
           ></span>
+          <oj-dialog
+            id="modalDialogNotification"
+            dialog-title="Notifications"
+            aria-describedby="desc"
+          >
+            <div slot="body">
+              <oj-bind-for-each data="[[notificationList]]">
+                <template>
+                  <div class="flex items-center gap-2 m-2">
+                    <img
+                      class="w-8 h-8 rounded-full object-cover"
+                      :src="[[`data:image/jpeg;base64,${$current.data.profileImage}`]]"
+                    ></img>
+                    <div>
+                      <strong class="text-[#4264b2]">
+                        <oj-bind-text
+                          value="[[$current.data.senderName]]"
+                        ></oj-bind-text>
+                      </strong>
+                      <span> </span>
+                      <span>
+                        <oj-bind-text
+                          value="[[$current.data.message]]"
+                        ></oj-bind-text>
+                        <span> </span>
+                        <strong>
+                          <oj-bind-text
+                          value="[[$current.data.postTitle]]"
+                          ></oj-bind-text>
+                        </strong>
+                        <span class="text-[#8f098f]">
+                          <oj-bind-text
+                          value="[[$current.data.content]]"
+                          ></oj-bind-text>
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                  <span class="italic ml-auto text-teal-600 text-xs">
+                     <oj-bind-text
+                          value="[[$current.data.dateCreated]]"
+                        ></oj-bind-text>
+                  </span>
+                  <hr/>
+                </template>
+                <template slot="noData"> No new notifications </template>
+              </oj-bind-for-each>
+            </div>
+            <div slot="footer">
+              <oj-button id="okButton" on-oj-action="[[closeModal]]"
+                >Close</oj-button
+              >
+            </div>
+          </oj-dialog>
           <div
             class="absolute h-4 w-4 text-white rounded-full bg-red-600 grid place-content-center text-xs top-[-8px] right-[-2px]"
           >
-            3
+            <oj-bind-text value="[[notificationList().length]]"></oj-bind-text>
           </div>
         </div>
         <div class="relative">
@@ -32,11 +87,11 @@
             role="img"
             aria-label="user"
           ></span>
-          <div
+          <!-- <div
             class="absolute h-4 w-4 text-white rounded-full bg-red-600 grid place-content-center text-xs top-[-8px] right-[-2px]"
           >
-            2
-          </div>
+            0
+          </div> -->
         </div>
         <div class="relative">
           <span
@@ -44,11 +99,11 @@
             role="img"
             aria-label="chat"
           ></span>
-          <div
+          <!-- <div
             class="absolute h-4 w-4 text-white rounded-full bg-red-600 grid place-content-center text-xs top-[-8px] right-[-2px]"
           >
             8
-          </div>
+          </div> -->
         </div>
       </div>
       <oj-avatar
@@ -120,7 +175,10 @@
           </div>
         </div>
         <div slot="gallery" data-bind="ojModule:{name:'gallery'}"></div>
-        <div slot="message" data-bind="ojModule:{name:'community'}"></div>
+        <div
+          slot="message"
+          data-bind="ojModule:{name:'community',params:{notificationList}}"
+        ></div>
       </oj-switcher>
       <oj-bind-if test="[[postListMatch]]">
         <div

@@ -11,7 +11,7 @@ define([
   "ojs/ojavatar",
   "ojs/ojknockout",
 ], function (ko, $, SockJs, UserContext, PostService, timeago) {
-  function CommunityViewModel() {
+  function CommunityViewModel(params) {
     var self = this;
     var stompClient = null;
     self.senderEmail = UserContext.user().email;
@@ -19,6 +19,7 @@ define([
     self.messageList = ko.observableArray([]);
     self.offset = ko.observable(0);
     self.loading = ko.observable(false);
+    self.notificationList = params.notificationList;
 
     self.getPreviousMessage = function () {
       self.loading(true);
@@ -73,7 +74,8 @@ define([
         stompClient.subscribe(
           "/global/notification/" + self.senderEmail,
           function (notification) {
-            console.log(JSON.parse(notification.body));
+            const data = JSON.parse(notification.body);
+            self.notificationList([...self.notificationList(), data]);
           }
         );
       });

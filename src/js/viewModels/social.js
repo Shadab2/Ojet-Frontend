@@ -21,6 +21,7 @@ define([
   "ojs/ojinputtext",
   "ojs/ojformlayout",
   "ojs/ojselectsingle",
+  "ojs/ojdialog",
   "ojs/ojinputsearch",
   "ojs/ojlistview",
   "ojs/ojlistitemlayout",
@@ -115,6 +116,16 @@ define([
     self.trendinPostDataProvider = new ArrayDataProvider(self.trendingPosts, {
       keyAttributes: "id",
     });
+    self.notificationList = ko.observableArray([]);
+    self.notificationVisible = ko.observable(false);
+
+    self.modalOpen = function () {
+      document.getElementById("modalDialogNotification").open();
+    };
+
+    self.closeModal = function () {
+      document.getElementById("modalDialogNotification").close();
+    };
 
     self.getUserMappings = async function () {
       try {
