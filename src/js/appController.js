@@ -73,7 +73,10 @@ define([
 
     current.user = UserContext.user;
     current.admin = UserContext.admin;
-    current.authenticated = UserContext.authenticated;
+    current.authToken = UserContext.authToken;
+    current.authenticated = ko.computed(function () {
+      return current.authToken() !== null;
+    });
 
     current.userLogin = ko.computed(function () {
       return current.user().email;
@@ -183,6 +186,9 @@ define([
         router.go({ path: "login" }).then(function () {
           this.navigated = true;
         });
+        current.authToken(null);
+        window.location.reload();
+
         return;
       }
       router.go({ path: event.detail.selectedValue }).then(function () {
