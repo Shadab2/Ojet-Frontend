@@ -29,7 +29,7 @@ define([
           self.loading(false);
           return;
         }
-        if (data.empty) {
+        if (data && data.empty) {
           self.loading(false);
           return;
         }

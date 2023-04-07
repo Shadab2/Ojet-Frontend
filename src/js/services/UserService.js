@@ -34,10 +34,9 @@ define(["../context/userContext", "axios"], function (UserContext, axios) {
           profileImage: "",
           role: null,
         },
-        "",
+        null,
         true
       );
-      UserContext.clearlocalStorage();
     }
 
     updateProfile(profile) {

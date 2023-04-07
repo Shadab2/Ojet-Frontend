@@ -16,10 +16,11 @@ define([
   "ojs/ojtable",
 ], function (ko, UserService, ArrayDataProvider) {
   function ServicesViewModel(context) {
-    const authenticated = context.routerState.detail.authenticated();
-    const router = context.parentRouter;
     var self = this;
-    if (!authenticated) {
+    self.authenticated = context.routerState.detail.authenticated;
+    const router = context.parentRouter;
+
+    if (!self.authenticated()) {
       router.go({ path: "login" }).then(function () {
         this.navigated = true;
       });

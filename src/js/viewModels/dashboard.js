@@ -17,9 +17,10 @@ define([
   "ojs/ojavatar",
 ], function (ko, UserContext, UserService, ArrayDataProvider) {
   function DashboardViewModel(context) {
-    const authenticated = context.routerState.detail.authenticated();
+    var self = this;
+    self.authenticated = context.routerState.detail.authenticated;
     const router = context.parentRouter;
-    if (!authenticated) {
+    if (!self.authenticated()) {
       router.go({ path: "login" }).then(function () {
         this.navigated = true;
       });

@@ -11,7 +11,6 @@
 define([
   "knockout",
   "../context/userContext",
-  "../services/userService",
   "../services/toastService",
   "../services/postService",
   "ojs/ojarraydataprovider",
@@ -27,23 +26,17 @@ define([
   "ojs/ojlistitemlayout",
   "ojs/ojknockout",
   "ojs/ojavatar",
-], function (
-  ko,
-  UserContext,
-  UserService,
-  ToastService,
-  PostService,
-  ArrayDataProvider
-) {
+], function (ko, UserContext, ToastService, PostService, ArrayDataProvider) {
   function SocialViewModel(context) {
-    const authenticated = context.routerState.detail.authenticated();
+    var self = this;
+    self.authenticated = UserContext.authToken;
     const router = context.parentRouter;
-    if (!authenticated) {
+    if (!self.authenticated()) {
       router.go({ path: "login" }).then(function () {
         this.navigated = true;
       });
     }
-    var self = this;
+
     this.connected = () => {};
 
     this.disconnected = () => {};
@@ -117,7 +110,6 @@ define([
       keyAttributes: "id",
     });
     self.notificationList = ko.observableArray([]);
-    self.notificationVisible = ko.observable(false);
 
     self.modalOpen = function () {
       document.getElementById("modalDialogNotification").open();
@@ -126,6 +118,17 @@ define([
     self.closeModal = function () {
       document.getElementById("modalDialogNotification").close();
     };
+
+    self.getNotificationList = function () {
+      PostService.fetchNotification((error, data) => {
+        if (error) {
+          console.log(error);
+          return;
+        }
+        self.notificationList(data);
+      });
+    };
+    self.getNotificationList();
 
     self.getUserMappings = async function () {
       try {

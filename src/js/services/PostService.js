@@ -163,6 +163,23 @@ define(["../context/userContext", "axios", "jquery"], function (
         },
       });
     }
+
+    fetchNotification(callback) {
+      const authToken = UserContext.authToken();
+      $.ajax({
+        method: "GET",
+        url: `http://localhost:8080/api/post/notifications`,
+        headers: {
+          Authorization: "Bearer " + authToken,
+        },
+        success: function (data) {
+          callback(null, data);
+        },
+        error: function (xhr, status, error) {
+          callback(error);
+        },
+      });
+    }
   }
   return new PostService();
 });

@@ -1,6 +1,6 @@
 define(["knockout"], function (ko) {
   var self = this;
-  self.authToken = ko.observable("");
+  self.authToken = ko.observable(null);
   self.avatar =
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQA7J_nWmuLQLoOtHyvwRXfkrkVvW621Bx9nQ&usqp=CAU";
   self.user = ko.observable({
@@ -25,7 +25,9 @@ define(["knockout"], function (ko) {
   self.init();
 
   self.authenticated = ko.computed(function () {
-    return self.authToken() !== "";
+    console.log("Inside computed " + (self.authToken() !== null));
+    console.log({ authtoken: self.authToken() });
+    return self.authToken() !== null;
   });
 
   self.admin = ko.computed(function () {
@@ -61,6 +63,7 @@ define(["knockout"], function (ko) {
     window.localStorage.removeItem("traning_user");
   };
   self.updateToken = function (authTokenFromBackend) {
+    console.log("Calling");
     self.authToken(authTokenFromBackend);
   };
 

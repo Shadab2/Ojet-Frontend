@@ -26,9 +26,9 @@ define([
 ], function (ko, UserContext, UserService, ToastService, ArrayDataProvider) {
   function ProfileViewModel(context) {
     var self = this;
-    const authenticated = context.routerState.detail.authenticated();
+    self.authenticated = context.routerState.detail.authenticated;
     const router = context.parentRouter;
-    if (!authenticated) {
+    if (!self.authenticated()) {
       router.go({ path: "login" }).then(function () {
         this.navigated = true;
       });
@@ -210,7 +210,6 @@ define([
         });
       } catch (e) {
         console.log(e);
-
         self.messages([ToastService.error("Something went wrong")]);
       }
     };

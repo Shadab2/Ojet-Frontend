@@ -21,9 +21,9 @@ define([
   function LoginViewModel(context) {
     var self = this;
     const router = context.parentRouter;
-    const authenticated = context.routerState.detail.authenticated();
+    self.authenticated = context.routerState.detail.authenticated;
     this.loaded = ko.observable(false);
-    if (authenticated) {
+    if (self.authenticated()) {
       router.go({ path: "home" }).then(function () {
         this.navigated = true;
       });
