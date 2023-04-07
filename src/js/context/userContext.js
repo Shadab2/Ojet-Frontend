@@ -25,8 +25,6 @@ define(["knockout"], function (ko) {
   self.init();
 
   self.authenticated = ko.computed(function () {
-    console.log("Inside computed " + (self.authToken() !== null));
-    console.log({ authtoken: self.authToken() });
     return self.authToken() !== null;
   });
 
@@ -63,7 +61,6 @@ define(["knockout"], function (ko) {
     window.localStorage.removeItem("traning_user");
   };
   self.updateToken = function (authTokenFromBackend) {
-    console.log("Calling");
     self.authToken(authTokenFromBackend);
   };
 

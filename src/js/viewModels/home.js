@@ -16,9 +16,9 @@ define(["knockout", "../accUtils", "../context/userContext"], function (
   function HomeViewModel(context) {
     var self = this;
     self.authenticated = context.routerState.detail.authenticated;
+
     const router = context.parentRouter;
     this.loaded = ko.observable(false);
-
     if (!self.authenticated()) {
       router.go({ path: "login" }).then(function () {
         this.navigated = true;
