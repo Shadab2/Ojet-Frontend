@@ -63,7 +63,7 @@ define([
       },
       {
         name: "Community",
-        id: "message",
+        id: "community",
         icons: "oj-ux-ico-oracle-chat-outline",
       },
       {
@@ -110,6 +110,7 @@ define([
       keyAttributes: "id",
     });
     self.notificationList = ko.observableArray([]);
+    self.messaggeCounter = ko.observable(0);
 
     self.modalOpen = function () {
       document.getElementById("modalDialogNotification").open();
@@ -128,7 +129,6 @@ define([
         self.notificationList(data);
       });
     };
-    self.getNotificationList();
 
     self.getUserMappings = async function () {
       try {
@@ -158,8 +158,6 @@ define([
         console.log(e);
       }
     };
-
-    self.fetchTrendingPosts();
 
     // navigationConfig
     self.config = {
@@ -248,6 +246,10 @@ define([
           }
         },
       },
+      community: {
+        notificationList: self.notificationList,
+        messaggeCounter: self.messaggeCounter,
+      },
     };
 
     self.searchValue = ko.observable("");
@@ -307,6 +309,13 @@ define([
       if (self.activeTab() !== "search") self.activeTab("search");
       self.getSearchResults();
     };
+
+    self.init = function () {
+      self.getNotificationList();
+      self.fetchTrendingPosts();
+    };
+
+    self.init();
   }
 
   /*

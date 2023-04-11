@@ -137,6 +137,7 @@ define([
         self.messages([
           ToastService.success("Profile Image Updated Successfully!"),
         ]);
+        self.fileToUpload = ko.observable(null);
       } catch (e) {
         self.messages([ToastService.error("Something went wrong!")]);
       }

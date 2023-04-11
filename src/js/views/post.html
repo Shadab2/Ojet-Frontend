@@ -78,6 +78,15 @@
       </oj-bind-if>
     </div>
   </oj-bind-if>
+  <oj-bind-if test="[[youtubeLink && youtubeLink.length > 0]]">
+    <iframe
+      width="100%"
+      height="250px"
+      title="video"
+      :src="[[youtubeLink]]"
+      class="rounded-md mx-auto my-3"
+    ></iframe>
+  </oj-bind-if>
   <oj-bind-if test="[[postimages().length>0]]">
     <img
       :src="[[image]]"

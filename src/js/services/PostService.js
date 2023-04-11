@@ -26,6 +26,7 @@ define(["../context/userContext", "axios", "jquery"], function (
           postFeedBack: ps.postFeedBack,
           upvoted: likedSet.has(ps.id),
           saved: savedSet.has(ps.id),
+          youtubeLink: ps.youtubeLink,
         },
         user: {
           firstName: ps.user.firstName,

@@ -19,7 +19,8 @@ define([
     self.messageList = ko.observableArray([]);
     self.offset = ko.observable(0);
     self.loading = ko.observable(false);
-    self.notificationList = params.notificationList;
+    self.notificationList = params?.notificationList;
+    self.messaggeCounter = params?.messaggeCounter;
 
     self.getPreviousMessage = function () {
       self.loading(true);
@@ -70,6 +71,7 @@ define([
           var chatHistory = document.getElementById("messageBody");
           element = chatHistory;
           chatHistory.scrollTop = chatHistory.scrollHeight;
+          self.messaggeCounter(self.messaggeCounter() + 1);
         });
         stompClient.subscribe(
           "/global/notification/" + self.senderEmail,

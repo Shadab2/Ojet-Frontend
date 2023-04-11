@@ -15,6 +15,7 @@ define([
     self.username = self.user.firstName + " " + self.user.lastName;
     self.postimages = ko.observableArray(self.post.images);
     self.resourceLinks = ko.observableArray(self.post.resourceLinks);
+    self.youtubeLink = self.post.youtubeLink;
     self.index = ko.observable(0);
     self.commentVal = ko.observable("");
     self.commentButtonDisable = ko.observable(!self.post.id);

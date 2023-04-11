@@ -64,6 +64,8 @@ define([
       keyAttributes: "value",
     });
 
+    self.youtubeLink = ko.observable("");
+
     self.addMoreLinkHandler = () => {
       self.linkId(1);
     };
@@ -156,6 +158,15 @@ define([
     self.isNextEnabled = ko.computed(function () {
       return self.selectedValue().step === "stp3";
     });
+
+    function getId(url) {
+      const regExp =
+        /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+      const match = url.match(regExp);
+
+      return match && match[2].length === 11 ? match[2] : null;
+    }
+
     self.handleNextClick = function (index) {
       if (index === 4) {
         const post = {
@@ -176,6 +187,9 @@ define([
             description: self.link2().desc,
             link: self.link2().link,
           });
+        if (self.youtubeLink !== "")
+          post.youtubeLink =
+            "https://www.youtube.com/embed/" + getId(self.youtubeLink());
         self.post(post);
       }
       self.selectedValue(self.stepArray()[index]);

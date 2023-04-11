@@ -93,17 +93,17 @@
             0
           </div> -->
         </div>
-        <div class="relative">
+        <div class="relative cursor-pointer" data-bind="click:()=>activeTab('community')">
           <span
             class="oj-ux-ico-chat text-white text-2xl"
             role="img"
             aria-label="chat"
           ></span>
-          <!-- <div
+          <div
             class="absolute h-4 w-4 text-white rounded-full bg-red-600 grid place-content-center text-xs top-[-8px] right-[-2px]"
           >
-            8
-          </div> -->
+             <oj-bind-text value="[[messaggeCounter]]"></oj-bind-text>
+          </div>
         </div>
       </div>
       <oj-avatar
@@ -176,8 +176,8 @@
         </div>
         <div slot="gallery" data-bind="ojModule:{name:'gallery'}"></div>
         <div
-          slot="message"
-          data-bind="ojModule:{name:'community',params:{notificationList}}"
+          slot="community"
+          data-bind="ojModule:{name:'community',params:config[activeTab()]}"
         ></div>
       </oj-switcher>
       <oj-bind-if test="[[postListMatch]]">

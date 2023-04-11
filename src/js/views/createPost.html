@@ -97,13 +97,25 @@
           <span class="font-semibold">Add More Links</span>
         </button>
       </oj-bind-if>
+      <oj-input-text
+        id="text-input-youtube"
+        value="{{youtubeLink}}"
+        label-hint="Youtube Link"
+        label-edge="inside"
+      ></oj-input-text>
+      <div class="flex justify-between items-center">
+        <div style="height: 1px; width: 45%; background-color: gray"></div>
+        <span class="font-semibold text-xl text-[#4267B2]">OR</span>
+        <div style="height: 1px; width: 45%; background-color: gray"></div>
+      </div>
       <oj-file-picker
         accept="[[Array.of('.jpeg','.png','.jpg')]]"
         selection-mode="multiple"
         on-oj-select="[[handleFileChange]]"
         on-oj-invalid-select="[[invalidListener]]"
         style="max-width: 100%"
-        class="my-2"
+        class="mb-2"
+        disabled="[[youtubeLink().length > 0]]"
       ></oj-file-picker>
       <oj-bind-if test="[[filesToUpload().length>0]]">
         <div class="flex items-center gap-2 text-white">
